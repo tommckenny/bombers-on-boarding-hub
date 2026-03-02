@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gym Pricing</title>
+  <meta name="description" content="Clear pricing for Open Gym, Coached Group Training, and Personal Training." />
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#111827;
+      --muted:#94a3b8;
+      --text:#e5e7eb;
+      --line:#233044;
+      --accent:#22c55e;
+      --accent2:#60a5fa;
+      --warning:#f59e0b;
+    }
+    *{box-sizing:border-box}
+    html, body{
+      background: var(--bg);
+    }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      line-height:1.35;
+    }
+    /* Keep the gradient even when embedded inside a host page */
+    .page-bg{
+      min-height:100vh;
+      width:100%;
+      background-color: var(--bg);
+      background: radial-gradient(1200px 800px at 20% 0%, #0f172a 0%, var(--bg) 55%);
+      background-attachment: fixed;
+    }
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:32px 18px 56px;
+    }
+    header{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:22px;
+    }
+    header > div{
+      width:100%;
+    }
+    h1{
+      font-size: clamp(26px, 3vw, 38px);
+      margin:0;
+      letter-spacing:-0.02em;
+    }
+    .sub{
+      color:var(--muted);
+      margin:6px 0 0;
+      font-size:14px;
+    }
+    .pillrow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:flex-end;
+    }
+    .pill{
+      border:1px solid var(--line);
+      background: rgba(17,24,39,0.55);
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+    .filter-row{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:10px;
+      margin-top:16px;
+      width:100%;
+    }
+    .filter-btn{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      justify-content:center;
+      min-height:92px;
+      width:100%;
+      border:1px solid rgba(71,85,105,0.95);
+      background: linear-gradient(180deg, rgba(43,56,78,0.92), rgba(31,41,59,0.86));
+      color:var(--text);
+      padding:16px 18px;
+      border-radius:18px;
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:0.01em;
+      cursor:pointer;
+      text-align:left;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 0 0 1px rgba(15,23,42,0.14);
+      transition: background 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+    }
+    .filter-btn:hover{
+      border-color: rgba(96,165,250,0.7);
+      background: linear-gradient(180deg, rgba(51,65,91,0.96), rgba(36,47,68,0.9));
+      transform: translateY(-1px);
+    }
+    .filter-btn[aria-pressed="true"]{
+      border-color: rgba(34,197,94,0.7);
+      background: linear-gradient(180deg, rgba(24,68,52,0.96), rgba(20,55,43,0.9));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 0 0 1px rgba(34,197,94,0.25);
+    }
+    @media(max-width:779px){
+      .filter-btn{
+        min-height:68px;
+        padding:12px 12px;
+        font-size:14px;
+      }
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+    }
+    .section-block{
+      grid-column: span 12;
+      padding:14px;
+      border-radius:20px;
+      border:1px solid rgba(35,48,68,0.9);
+      box-shadow: 0 0 0 1px rgba(148,163,184,0.12);
+      background: rgba(2,6,23,0.28);
+    }
+    .section-block--gym{
+      background: linear-gradient(180deg, rgba(26,38,58,0.78), rgba(12,18,28,0.5));
+    }
+    .section-block--group{
+      background: linear-gradient(180deg, rgba(24,36,54,0.78), rgba(10,16,26,0.5));
+    }
+    .section-block--pt{
+      background: linear-gradient(180deg, rgba(30,31,50,0.76), rgba(13,14,24,0.48));
+    }
+    .section-block[hidden]{
+      display:none;
+    }
+    .section-grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+    }
+    .card{
+      grid-column: span 12;
+      background: linear-gradient(180deg, rgba(17,24,39,0.92), rgba(17,24,39,0.75));
+      border:1px solid rgba(35,48,68,0.9);
+      border-radius:18px;
+      padding:18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .card--recurring{
+      background: linear-gradient(180deg, rgba(30,46,64,0.9), rgba(20,32,48,0.78));
+      border-color: rgba(34,197,94,0.6);
+      box-shadow:
+        0 10px 30px rgba(0,0,0,0.25),
+        0 0 0 1px rgba(34,197,94,0.2);
+    }
+    @media(min-width:900px){
+      .card.half{grid-column: span 6;}
+    }
+
+    /* Card header strip (high contrast) */
+    .card h2{
+      margin:-18px -18px 12px;
+      padding:14px 18px;
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:-0.01em;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background: linear-gradient(180deg,
+        rgba(2,6,23,0.98) 0%,
+        rgba(2,6,23,0.82) 55%,
+        rgba(2,6,23,0.62) 100%
+      );
+      border-bottom:2px solid rgba(96,165,250,0.55);
+      box-shadow:
+        inset 0 -1px 0 rgba(255,255,255,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      border-radius:18px 18px 0 0;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      color:var(--muted);
+      background: rgba(2,6,23,0.35);
+    }
+
+    /* Make badges pop when inside the header strip */
+    .card h2 .badge{
+      background: rgba(96,165,250,0.18);
+      border-color: rgba(96,165,250,0.7);
+      color: #f1f5f9;
+    }
+
+    .rows{
+      margin-top:12px;
+      border-top:1px solid rgba(35,48,68,0.7);
+    }
+    .row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 0;
+      border-bottom:1px solid rgba(35,48,68,0.55);
+    }
+    .row:last-child{border-bottom:none}
+    .name{font-weight:650;letter-spacing:-0.01em}
+    .desc{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:3px;
+      max-width:46ch;
+    }
+    .rate-note{
+      margin-top:8px;
+      padding-left:10px;
+      border-left:2px solid rgba(96,165,250,0.65);
+      color:#cbd5e1;
+    }
+    .rate-note strong{
+      color:#f8fafc;
+    }
+    .price{
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:-0.01em;
+      white-space:nowrap;
+    }
+    .small{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:2px;
+      text-align:right;
+      white-space:nowrap;
+    }
+    .option-stack{
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+    .aligned-options .option-stack{
+      grid-auto-rows: 1fr;
+    }
+    .option-tile{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px;
+      border:1px solid rgba(100,116,139,0.95);
+      border-radius:16px;
+      background: linear-gradient(180deg, rgba(43,56,78,0.98), rgba(31,41,59,0.92));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.07),
+        0 0 0 1px rgba(15,23,42,0.16);
+    }
+    .aligned-options .option-tile{
+      height:100%;
+      min-height:172px;
+    }
+    .aligned-options--compact .option-tile{
+      min-height:0;
+    }
+    .card--natural-height{
+      align-self:start;
+    }
+    .option-price{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:12px;
+      flex-shrink:0;
+    }
+    .addon-mini{
+      display:inline-flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:2px;
+      padding:10px 12px;
+      min-width:152px;
+      border:1px solid rgba(74,222,128,0.7);
+      border-radius:12px;
+      background: linear-gradient(180deg, rgba(24,68,52,0.96), rgba(20,55,43,0.92));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      text-align:left;
+      cursor:pointer;
+      appearance:none;
+      -webkit-appearance:none;
+      transition: border-color 160ms ease, background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+    }
+    .addon-mini:hover{
+      border-color: rgba(134,239,172,0.9);
+      background: linear-gradient(180deg, rgba(29,81,61,0.98), rgba(23,63,48,0.94));
+      transform: translateY(-1px);
+    }
+    .addon-mini:focus-visible{
+      outline:none;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.06),
+        0 0 0 2px rgba(74,222,128,0.3);
+    }
+    .addon-mini.is-active{
+      border-color: rgba(248,113,113,0.75);
+      background: linear-gradient(180deg, rgba(101,31,31,0.96), rgba(76,26,26,0.92));
+    }
+    .addon-mini.is-active:hover{
+      border-color: rgba(252,165,165,0.9);
+      background: linear-gradient(180deg, rgba(120,37,37,0.98), rgba(90,29,29,0.94));
+    }
+    .addon-mini-label{
+      font-size:12px;
+      line-height:1.2;
+      color:#dbeafe;
+      font-weight:700;
+    }
+    .addon-mini-price{
+      font-size:16px;
+      line-height:1;
+      color:#f8fafc;
+      font-weight:800;
+    }
+    .card--recurring .option-tile{
+      border-color: rgba(100,116,139,0.95);
+      background: linear-gradient(180deg, rgba(43,56,78,0.98), rgba(31,41,59,0.92));
+    }
+    .callouts{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+      margin-top:14px;
+    }
+    @media(min-width:900px){
+      .callouts{grid-template-columns: 1fr 1fr;}
+    }
+    .callout{
+      border:1px dashed rgba(35,48,68,0.9);
+      border-radius:16px;
+      padding:14px;
+      background: rgba(2,6,23,0.25);
+    }
+    .callout.addon{
+      border-style: solid;
+      border-color: var(--warning);
+      background: linear-gradient(180deg, rgba(15,30,48,0.85), rgba(8,16,28,0.7));
+      box-shadow: 0 0 0 1px rgba(245,158,11,0.35);
+    }
+    .callout.addon h3{
+      color:#e2e8f0;
+    }
+    .callout h3{
+      margin:0 0 6px;
+      font-size:14px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .callout p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      margin-top:10px;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid rgba(35,48,68,0.75);
+      background: rgba(2,6,23,0.2);
+    }
+    .table th, .table td{
+      text-align:left;
+      padding:10px 12px;
+      border-bottom:1px solid rgba(35,48,68,0.55);
+      font-size:13px;
+    }
+    .table th{
+      color:var(--muted);
+      font-weight:650;
+      background: rgba(2,6,23,0.35);
+    }
+    .table tr:last-child td{border-bottom:none}
+    .right{text-align:right}
+    .note{color:var(--muted);font-size:12px;margin-top:10px}
+    .footer{
+      margin-top:22px;
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px 14px;
+      justify-content:space-between;
+      align-items:center;
+      border-top:1px solid rgba(35,48,68,0.55);
+      padding-top:14px;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:999px;display:inline-block;margin-right:8px;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.12);
+    }
+    .dot.blue{background:var(--accent2); box-shadow: 0 0 0 3px rgba(96,165,250,0.12);}
+    .dot.warn{background:var(--warning); box-shadow: 0 0 0 3px rgba(245,158,11,0.12);}
+    .muted{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="page-bg">
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Gym Pricing</h1>
+        <p class="sub">Clear options for Open Gym, Coached Group Training, and Personal Training.</p>
+        <div class="filter-row" role="group" aria-label="Filter pricing sections">
+          <button class="filter-btn" type="button" data-filter="gym" aria-pressed="true">Open Gym</button>
+          <button class="filter-btn" type="button" data-filter="group" aria-pressed="false">Coached Group Training</button>
+          <button class="filter-btn" type="button" data-filter="pt" aria-pressed="false">Personal Training</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="section-block section-block--gym" aria-label="Open Gym pricing" data-section="gym">
+        <div class="section-grid">
+          <!-- Open Gym heading -->
+          <div style="grid-column: span 12; margin-top: 2px;">
+            <h2 style="margin:0 0 6px; font-size:20px; letter-spacing:-0.01em; display:flex; align-items:center; gap:10px;">
+              Open Gym <span class="badge">Access to the gym floor</span>
+            </h2>
+            <p class="sub" style="margin:0;">Choose a drop-in pass or a recurring membership.</p>
+          </div>
+
+          <section class="card half aligned-options aligned-options--compact card--natural-height" aria-labelledby="open-gym-dropins">
+            <h2 id="open-gym-dropins">Drop-ins <span class="badge">One-time</span></h2>
+            <div class="option-stack" role="list">
+              <div class="option-tile" role="listitem">
+                <div><div class="name">Day Pass</div><div class="desc">Access for one day.</div></div>
+                <div><div class="price">£12.85</div><div class="small">one-time</div></div>
+              </div>
+              <div class="option-tile" role="listitem">
+                <div><div class="name">Week Pass</div><div class="desc">24/7 access for 7 days.</div></div>
+                <div><div class="price">£30.00</div><div class="small">one-time</div></div>
+              </div>
+              <div class="option-tile" role="listitem">
+                <div><div class="name">4-Week Pass</div><div class="desc">24/7 access for 4 weeks.</div></div>
+                <div><div class="price">£80.00</div><div class="small">one-time</div></div>
+              </div>
+            </div>
+            <p class="note">Best for occasional visits (no recurring billing).</p>
+          </section>
+
+          <section class="card card--recurring half aligned-options aligned-options--compact card--natural-height" aria-labelledby="open-gym-recurring">
+            <h2 id="open-gym-recurring">Recurring plans <span class="badge">Every 4 weeks</span></h2>
+            <div class="option-stack" role="list">
+              <div class="option-tile" role="listitem">
+                <div><div class="name">24/7 Access</div><div class="desc">Full access, anytime.</div></div>
+                <div><div class="price">£65.76</div><div class="small">every 4 weeks</div></div>
+              </div>
+              <div class="option-tile" role="listitem">
+                <div><div class="name">Off-Peak Access</div><div class="desc"><strong>Weekdays</strong><br>10:30 - 15:30<br><strong>Weekends</strong><br>24 hour access</div></div>
+                <div><div class="price">£50.10</div><div class="small">every 4 weeks</div></div>
+              </div>
+            </div>
+            <p class="note">Recurring memberships are billed every <strong>4 weeks</strong>.</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="section-block section-block--group" aria-label="Coached Group Training pricing" data-section="group">
+        <div class="section-grid">
+          <!-- Coached Group Training heading -->
+          <div style="grid-column: span 12; margin-top: 10px;">
+            <h2 style="margin:0 0 6px; font-size:20px; letter-spacing:-0.01em; display:flex; align-items:center; gap:10px;">
+              Coached Group Training <span class="badge">Structured coaching &amp; coached sessions</span>
+            </h2>
+            <p class="sub" style="margin:0;">Choose a one-off option, a recurring membership, and add open gym access if needed.</p>
+          </div>
+
+          <section class="card half aligned-options" aria-labelledby="group-training-dropins">
+            <h2 id="group-training-dropins">Non-recurring <span class="badge">One-time</span></h2>
+            <div class="option-stack" role="list">
+              <div class="option-tile" role="listitem">
+                <div><div class="name">Single</div><div class="desc">&bull; One coached session.<br>&bull; 7 day expiry.</div></div>
+                <div><div class="price">£14.50</div><div class="small">one-time</div></div>
+              </div>
+              <div class="option-tile" role="listitem">
+                <div><div class="name">Block of 4</div><div class="desc">&bull; 4 coached sessions.<br>&bull; 4 week expiry.<br>&bull; <strong>£12.38 per session</strong></div></div>
+                <div><div class="price">£49.50</div><div class="small">one-time</div></div>
+              </div>
+            </div>
+            <p class="note">Best for occasional coached sessions with no recurring billing.</p>
+          </section>
+
+          <section class="card card--recurring half aligned-options" aria-labelledby="group-training-recurring">
+            <h2 id="group-training-recurring">Recurring <span class="badge">Every 4 weeks</span></h2>
+            <div class="option-stack" role="list">
+              <div class="option-tile" role="listitem">
+                <div><div class="name">Core</div><div class="desc">&bull; Up to 3 coached sessions per week.<div class="rate-note">Attend 2 classes per week? Works out as <strong>£10.94/session</strong></div><div class="rate-note">Attend all 3 per week? Works out as <strong>£7.29/session</strong></div></div></div>
+                <div class="option-price">
+                  <div>
+                    <div class="price" data-base-price="87.50">£87.50</div>
+                    <div class="small">every 4 weeks</div>
+                  </div>
+                  <button class="addon-mini" type="button" data-addon-toggle data-addon-amount="10">
+                    <div class="addon-mini-label">Add 24/7 open gym</div>
+                    <div class="addon-mini-price">£10</div>
+                  </button>
+                </div>
+              </div>
+              <div class="option-tile" role="listitem">
+                <div><div class="name">Unlimited</div><div class="desc">&bull; Unlimited Coached Group training sessions.</div></div>
+                <div class="option-price">
+                  <div>
+                    <div class="price" data-base-price="97.50">£97.50</div>
+                    <div class="small">every 4 weeks</div>
+                  </div>
+                  <button class="addon-mini" type="button" data-addon-toggle data-addon-amount="10">
+                    <div class="addon-mini-label">Add 24/7 open gym</div>
+                    <div class="addon-mini-price">£10</div>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <p class="note">Recurring memberships are billed every <strong>4 weeks</strong>.</p>
+          </section>
+
+        </div>
+      </section>
+
+      <section class="section-block section-block--pt" aria-label="Personal Training pricing" data-section="pt">
+        <div class="section-grid">
+          <div style="grid-column: span 12; margin-top: 10px;">
+            <h2 style="margin:0 0 6px; font-size:20px; letter-spacing:-0.01em; display:flex; align-items:center; gap:10px;">
+              Personal Training <span class="badge">1:1 coaching</span>
+            </h2>
+            <p class="sub" style="margin:0;">Choose a single session or a block package with a lower per-session rate.</p>
+          </div>
+          <section class="card" aria-labelledby="pt-blocks">
+            <h2 id="pt-blocks">PT Blocks <span class="badge">Per session pricing</span></h2>
+            <div class="option-stack" role="list">
+              <div class="option-tile" role="listitem">
+                <div><div class="name">1 Session</div><div class="desc">&bull; Single 1:1 coaching session.<br>&bull; <strong>Total: £60</strong></div></div>
+                <div><div class="price">£60</div><div class="small">per session</div></div>
+              </div>
+              <div class="option-tile" role="listitem">
+                <div><div class="name">4 Sessions</div><div class="desc">&bull; 4 x 1:1 coaching sessions.<br>&bull; 4 week expiry.<br>&bull; <strong>Total: £210</strong></div></div>
+                <div><div class="price">£52.50</div><div class="small">per session</div></div>
+              </div>
+              <div class="option-tile" role="listitem">
+                <div><div class="name">12 Sessions</div><div class="desc">&bull; 12 x 1:1 coaching sessions.<br>&bull; 12 week expiry.<br>&bull; <strong>Total: £600</strong></div></div>
+                <div><div class="price">£50.00</div><div class="small">per session</div></div>
+              </div>
+              <div class="option-tile" role="listitem">
+                <div><div class="name">24 Sessions</div><div class="desc">&bull; 24 x 1:1 coaching sessions.<br>&bull; 24 week expiry.<br>&bull; <strong>Total: £1,140</strong></div></div>
+                <div><div class="price">£47.50</div><div class="small">per session</div></div>
+              </div>
+            </div>
+
+            <div class="callout" style="margin-top:14px;">
+              <h3>💪 PT Member Bonus</h3>
+              <p>Get a <strong>50% discount</strong> on <strong>Open Gym recurring plans</strong> while you have a current PT block.</p>
+            </div>
+
+            <p class="note">Prices shown in GBP (£). Recurring plans are billed every 4 weeks.</p>
+          </section>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      <div>Last updated: <span id="lastUpdated"></span></div>
+      <div class="muted">Billing note: recurring plans are billed every 4 weeks.</div>
+    </div>
+  </div>
+  </div>
+
+  <script>
+    const d = new Date();
+    const fmt = new Intl.DateTimeFormat(undefined, { year:'numeric', month:'long', day:'numeric' });
+    const el = document.getElementById('lastUpdated');
+    if (el) el.textContent = fmt.format(d);
+
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const sections = document.querySelectorAll('[data-section]');
+
+    const setFilter = (filter) => {
+      sections.forEach((section) => {
+        const key = section.getAttribute('data-section');
+        section.hidden = key !== filter;
+      });
+      filterButtons.forEach((btn) => {
+        btn.setAttribute('aria-pressed', btn.getAttribute('data-filter') === filter ? 'true' : 'false');
+      });
+    };
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => setFilter(btn.getAttribute('data-filter')));
+    });
+    setFilter('gym');
+
+    const formatPrice = (value) => `£${value.toFixed(2)}`;
+
+    document.querySelectorAll('[data-addon-toggle]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const optionTile = button.closest('.option-tile');
+        const priceEl = optionTile?.querySelector('.price[data-base-price]');
+        const labelEl = button.querySelector('.addon-mini-label');
+        if (!priceEl || !labelEl) return;
+
+        const basePrice = Number(priceEl.getAttribute('data-base-price'));
+        const addonAmount = Number(button.getAttribute('data-addon-amount') || '0');
+        const isActive = button.classList.toggle('is-active');
+        const nextPrice = isActive ? basePrice + addonAmount : basePrice;
+
+        priceEl.textContent = formatPrice(nextPrice);
+        labelEl.textContent = isActive ? 'Remove open gym' : 'Add 24/7 open gym';
+        button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+      button.setAttribute('aria-pressed', 'false');
+    });
+
+  </script>
+</body>
+</html>

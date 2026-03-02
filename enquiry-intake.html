@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BombersPT — Welcome</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body.intake {
+      --text-main: #f8fafc;
+      --muted-text: rgba(248, 250, 252, 0.82);
+    }
+
+    .intake {
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .intake-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      background: radial-gradient(1200px 800px at 20% 0%, #0f172a 0%, #0b0f14 55%) fixed;
+    }
+
+    .intake-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(900px 480px at 15% 15%, rgba(37, 99, 235, 0.16), transparent 60%),
+        radial-gradient(900px 520px at 85% 30%, rgba(56, 189, 248, 0.10), transparent 55%),
+        linear-gradient(180deg, rgba(2, 6, 23, 0.45), rgba(2, 6, 23, 0.88));
+      pointer-events: none;
+    }
+
+    .intake-bg__media {
+      position: absolute;
+      inset: -1px;
+      filter: saturate(0.95) contrast(1.05);
+      transform: scale(1.02);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .intake-bg__media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .intake-bg__media.has-video video {
+      display: block;
+    }
+
+    .intake-bg__media iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: none;
+      transform: scale(1.2);
+      transform-origin: center;
+      filter: saturate(0.95) contrast(1.05);
+    }
+
+    .intake-bg__media.has-youtube iframe {
+      display: block;
+    }
+
+    .intake-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 1rem 1rem 0.25rem;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(2, 6, 23, 0.72), rgba(2, 6, 23, 0));
+    }
+
+    .intake-nav__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      user-select: none;
+    }
+
+    .brand-badge {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #1976d2, #60a5fa);
+      box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.12);
+    }
+
+    .intake-nav__link {
+      color: rgba(248, 250, 252, 0.88);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .intake-nav__link:hover,
+    .intake-nav__link:focus-visible {
+      color: var(--text-main);
+      outline: none;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .intake .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 2.25rem;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      min-height: unset;
+    }
+
+    .intake-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      align-items: start;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 0.5rem 0 0;
+    }
+
+    .hero-title {
+      margin: 0.9rem 0 0;
+      color: var(--text-main);
+      font-size: clamp(2.05rem, 4.6vw, 3.25rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-subtitle {
+      margin: 0.85rem 0 0;
+      color: rgba(248, 250, 252, 0.88);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      max-width: 52ch;
+    }
+
+    .hero-subtitle:empty {
+      display: none;
+    }
+
+    .wizard-description:empty {
+      display: none;
+    }
+
+    .wizard-card {
+      position: relative;
+      border-radius: 22px;
+      padding: 1.3rem 1.25rem 1.15rem;
+      background: radial-gradient(1200px 500px at 30% 0%, rgba(37, 99, 235, 0.16), rgba(2, 6, 23, 0.78) 55%) ;
+      border: 1px solid rgba(59, 130, 246, 0.18);
+      box-shadow:
+        0 22px 60px rgba(0, 0, 0, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+    }
+
+    .wizard-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(700px 280px at 20% 0%, rgba(96, 165, 250, 0.15), transparent 60%);
+      pointer-events: none;
+    }
+
+    .wizard-progress {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.1rem;
+      color: rgba(248, 250, 252, 0.88);
+      font-size: 0.92rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .wizard-progress__bar {
+      flex: 1;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.12);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      overflow: hidden;
+    }
+
+    .wizard-progress__bar > div {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.8), rgba(125, 211, 252, 0.75));
+      border-radius: 999px;
+      transition: width 220ms ease;
+    }
+
+    .wizard-question {
+      position: relative;
+      margin: 0;
+      color: var(--text-main);
+      font-size: clamp(1.55rem, 2.25vw, 2.2rem);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+
+    .wizard-description {
+      position: relative;
+      margin: 0.85rem 0 0;
+      color: rgba(248, 250, 252, 0.88);
+      line-height: 1.6;
+      font-size: 1.02rem;
+    }
+
+    .wizard-options {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+      margin-top: 1.25rem;
+    }
+
+    .option-card {
+      width: 100%;
+      text-align: left;
+      padding: 1.1rem 1.15rem 1.05rem;
+      border-radius: 20px;
+      border: 2px solid rgba(148, 163, 184, 0.20);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.70), rgba(2, 6, 23, 0.64));
+      cursor: pointer;
+      transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+      color: var(--text-main);
+      font: inherit;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .option-card__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.9rem;
+    }
+
+    .option-card__content {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .option-card__mini {
+      flex: 0 0 auto;
+      align-self: flex-start;
+      padding: 0.36rem 0.6rem;
+      border-radius: 10px;
+      border: 1px solid rgba(96, 165, 250, 0.5);
+      background: rgba(30, 64, 175, 0.2);
+      color: rgba(248, 250, 252, 0.95);
+      font-size: 0.86rem;
+      font-weight: 700;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .option-card:hover,
+    .option-card:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(96, 165, 250, 0.7);
+      box-shadow:
+        0 18px 36px rgba(0, 0, 0, 0.35),
+        0 0 0 4px rgba(96, 165, 250, 0.12);
+      outline: none;
+    }
+
+    .option-card[aria-pressed="true"] {
+      border-color: rgba(96, 165, 250, 0.9);
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.35),
+        0 0 0 4px rgba(96, 165, 250, 0.16);
+    }
+
+    .option-card__title {
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin: 0;
+      font-size: 1.14rem;
+    }
+
+    .option-card__body {
+      margin: 0.55rem 0 0;
+      color: rgba(248, 250, 252, 0.88);
+      line-height: 1.55;
+      font-size: 1.02rem;
+    }
+
+    .option-card__list {
+      margin: 0.7rem 0 0;
+      padding-left: 1.15rem;
+      color: rgba(248, 250, 252, 0.82);
+      line-height: 1.55;
+      font-size: 0.98rem;
+    }
+
+    .wizard-footer {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.25rem;
+    }
+
+    .wizard-footer__left,
+    .wizard-footer__right {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .intake .btn {
+      border-radius: 999px;
+      padding: 0.65rem 1.05rem;
+      font-weight: 700;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: rgba(148, 163, 184, 0.14);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      color: rgba(248, 250, 252, 0.94);
+    }
+
+    .btn-secondary:hover,
+    .btn-secondary:focus-visible {
+      background: rgba(148, 163, 184, 0.2);
+    }
+
+    .btn[disabled] {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .summary-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(2, 6, 23, 0.5);
+      border: 1px solid rgba(35, 48, 68, 0.75);
+      color: rgba(248, 250, 252, 0.9);
+      font-size: 0.95rem;
+      font-weight: 650;
+    }
+
+    .form-shell {
+      margin-top: 1.25rem;
+      border-radius: 22px;
+      border: 1px solid rgba(35, 48, 68, 0.85);
+      overflow: hidden;
+      background: rgba(2, 6, 23, 0.45);
+      box-shadow: 0 26px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    .form-shell iframe {
+      width: 100%;
+      border: none;
+      display: block;
+      min-height: 920px;
+    }
+
+    @media (min-width: 940px) {
+      .intake-grid {
+        gap: 1.75rem;
+        max-width: 860px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .wizard-card {
+        padding: 1.15rem 1.05rem 1rem;
+      }
+
+      .option-card {
+        padding: 1rem 1rem 0.95rem;
+      }
+
+      .option-card__row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .option-card__mini {
+        align-self: flex-start;
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+<body class="intake">
+  <div class="build-badge">enquiry v0.16</div>
+
+  <div class="intake-bg" aria-hidden="true">
+    <div class="intake-bg__media" id="welcome-video-shell">
+      <video id="welcome-video" autoplay loop muted playsinline preload="metadata"></video>
+    </div>
+  </div>
+
+  <header class="intake-nav">
+    <div class="intake-nav__inner">
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="intake-grid">
+      <section class="hero">
+        <h1 class="hero-title">Welcome to Bombers Physical Training!</h1>
+        <p class="hero-subtitle">Tell us what you’re enquiring about.</p>
+      </section>
+
+      <section class="wizard" aria-label="Enquiry questions">
+        <div class="wizard-card" role="region" aria-live="polite">
+          <div class="wizard-progress">
+            <div id="wizard-step-label">QUESTION 1 OF 2</div>
+            <div class="wizard-progress__bar" aria-hidden="true"><div id="wizard-progress-fill"></div></div>
+          </div>
+
+          <h2 class="wizard-question" id="wizard-question"></h2>
+          <p class="wizard-description" id="wizard-description"></p>
+
+          <div class="wizard-options" id="wizard-options"></div>
+
+          <div class="wizard-footer">
+            <div class="wizard-footer__left" id="wizard-footer-left"></div>
+            <div class="wizard-footer__right" id="wizard-footer-right"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="form-shell" id="form-shell" hidden>
+      <iframe
+        id="OBLoFFzTAd7KVD7bmWJe"
+        title="BombersPT enquiry form"
+        scrolling="no"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const BUILD_VIDEO_URL = "https://www.youtube.com/watch?v=tUykoP30Gb0";
+      const FORM_ID = "OBLoFFzTAd7KVD7bmWJe";
+      const FORM_BASE_URL = `https://links.bomberspt.co.uk/widget/survey/${FORM_ID}`;
+      const STORAGE_KEY = "bpt_enquiry_intake_v1";
+
+      const ui = {
+        videoShell: document.getElementById("welcome-video-shell"),
+        video: document.getElementById("welcome-video"),
+        stepLabel: document.getElementById("wizard-step-label"),
+        progressFill: document.getElementById("wizard-progress-fill"),
+        question: document.getElementById("wizard-question"),
+        description: document.getElementById("wizard-description"),
+        options: document.getElementById("wizard-options"),
+        footerLeft: document.getElementById("wizard-footer-left"),
+        footerRight: document.getElementById("wizard-footer-right"),
+        formShell: document.getElementById("form-shell"),
+        formIframe: document.getElementById(FORM_ID)
+      };
+
+      function getContactIdFromURL() {
+        let contactId = new URLSearchParams(window.location.search).get("contactId");
+        if (!contactId) {
+          const match = window.location.pathname.match(/-contactId=([^/]+)/);
+          contactId = match && match[1];
+        }
+        return contactId || "";
+      }
+
+      function saveState(state) {
+        try {
+          sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {}
+      }
+
+      function loadState() {
+        try {
+          const raw = sessionStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function setVideo(url) {
+        if (!url) return;
+        const youTubeId = extractYouTubeId(url);
+        if (youTubeId) {
+          const iframe = document.createElement("iframe");
+          iframe.title = "BombersPT background video";
+          iframe.loading = "lazy";
+          iframe.referrerPolicy = "no-referrer-when-downgrade";
+          iframe.allow = "autoplay; encrypted-media; picture-in-picture";
+          iframe.src = `https://www.youtube-nocookie.com/embed/${youTubeId}?autoplay=1&mute=1&loop=1&playlist=${youTubeId}&controls=0&modestbranding=1&playsinline=1&rel=0&iv_load_policy=3`;
+          ui.videoShell.appendChild(iframe);
+          ui.videoShell.classList.add("has-youtube");
+          return;
+        }
+
+        const source = document.createElement("source");
+        source.src = url;
+        const ext = (url.split(".").pop() || "").toLowerCase();
+        if (ext === "webm") source.type = "video/webm";
+        if (ext === "mp4") source.type = "video/mp4";
+        ui.video.appendChild(source);
+        ui.videoShell.classList.add("has-video");
+      }
+
+      function extractYouTubeId(url) {
+        try {
+          const u = new URL(url);
+          if (u.hostname === "youtu.be") {
+            return u.pathname.replace("/", "").trim();
+          }
+          if (u.hostname.includes("youtube.com")) {
+            if (u.pathname === "/watch") return u.searchParams.get("v") || "";
+            if (u.pathname.startsWith("/embed/")) return u.pathname.split("/embed/")[1]?.split("/")[0] || "";
+            if (u.pathname.startsWith("/shorts/")) return u.pathname.split("/shorts/")[1]?.split("/")[0] || "";
+          }
+          return "";
+        } catch (e) {
+          return "";
+        }
+      }
+
+      function makeButton({ text, onClick, kind = "primary", disabled = false }) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = kind === "secondary" ? "btn btn-secondary" : "btn";
+        button.textContent = text;
+        button.disabled = !!disabled;
+        button.addEventListener("click", onClick);
+        return button;
+      }
+
+      function pill(text) {
+        const el = document.createElement("div");
+        el.className = "summary-pill";
+        el.textContent = text;
+        return el;
+      }
+
+      function optionCard({ title, body, list, mini, pressed, onClick }) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "option-card";
+        button.setAttribute("aria-pressed", pressed ? "true" : "false");
+        button.addEventListener("click", onClick);
+
+        const row = document.createElement("div");
+        row.className = "option-card__row";
+
+        const content = document.createElement("div");
+        content.className = "option-card__content";
+
+        const h = document.createElement("div");
+        h.className = "option-card__title";
+        h.textContent = title;
+        content.appendChild(h);
+
+        if (body) {
+          const p = document.createElement("div");
+          p.className = "option-card__body";
+          p.textContent = body;
+          content.appendChild(p);
+        }
+
+        if (Array.isArray(list) && list.length) {
+          const ul = document.createElement("ul");
+          ul.className = "option-card__list";
+          list.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            ul.appendChild(li);
+          });
+          content.appendChild(ul);
+        }
+
+        row.appendChild(content);
+        if (mini) {
+          const miniEl = document.createElement("div");
+          miniEl.className = "option-card__mini";
+          miniEl.textContent = mini;
+          row.appendChild(miniEl);
+        }
+        button.appendChild(row);
+
+        return button;
+      }
+
+      function encodeFormURL(metadata) {
+        const url = new URL(FORM_BASE_URL);
+        const enquiryType = getEnquiryTypeValue(metadata);
+        url.search = "";
+        url.searchParams.set("enquiry_type", enquiryType);
+        return url.toString();
+      }
+
+      function getEnquiryTypeValue(metadata) {
+        const followUpToType = {
+          personal_training: "1-1 Personal Training",
+          coached_group_training: "Coached Group Sessions",
+          pre_postnatal: "Coached Group Sessions",
+          regular: "Open Gym",
+          visiting: "Open Gym",
+          anything_else: "Physio & Rehab"
+        };
+        return followUpToType[metadata?.followUp] || "Physio & Rehab";
+      }
+
+      function updatePageURLParams(metadata) {
+        try {
+          const url = new URL(window.location.href);
+          const enquiryType = getEnquiryTypeValue(metadata);
+          url.search = "";
+          url.searchParams.set("enquiry_type", enquiryType);
+          window.history.replaceState({}, "", url.toString());
+        } catch (_) {}
+      }
+
+      function loadFormEmbedScriptOnce() {
+        if (window.__bptFormEmbedLoaded) return;
+        window.__bptFormEmbedLoaded = true;
+        const s = document.createElement("script");
+        s.src = "https://links.bomberspt.co.uk/js/form_embed.js";
+        document.body.appendChild(s);
+      }
+
+      function ensureIframeURL(expectedUrl) {
+        if (!ui.formIframe || !expectedUrl) return;
+        const normalize = v => String(v || "").replace(/\/+$/, "");
+        const expected = normalize(expectedUrl);
+        const current = normalize(ui.formIframe.src || ui.formIframe.getAttribute("src") || "");
+        if (current !== expected) {
+          ui.formIframe.src = expectedUrl;
+        }
+      }
+
+      const SERVICE_OPTIONS = [
+        {
+          key: "fitness_coaching",
+          title: "Fitness coaching",
+          body: "Click here for:",
+          list: ["1-1 Personal Training", "Coached Group Sessions", "Pre/Postnatal enquiries"]
+        },
+        {
+          key: "open_gym_access",
+          title: "Open gym access",
+          body: "Click here for:",
+          list: ["Off peak open gym access", "24/7 open gym access", "Open gym drop-ins"]
+        },
+        {
+          key: "not_sure",
+          title: "I’m not sure what I want!",
+          body: "Click here for: anything else!"
+        }
+      ];
+
+      const FOLLOW_UP = {
+        fitness_coaching: {
+          question: "Which fitness coaching option are you enquiring about?",
+          description: "",
+          options: [
+            { key: "personal_training", title: "1-1 Personal Training", body: "1-to-1 coached sessions", mini: "£47.50-£60/session" },
+            { key: "coached_group_training", title: "Coached Group Sessions", body: "Bombers Blueprint, Weightlifting", mini: "£7.29-£14.50/session" },
+            { key: "pre_postnatal", title: "Pre/Postnatal enquiries", body: "Support around pregnancy and postnatal training", mini: "coached group and 1-1 available" }
+          ]
+        },
+        open_gym_access: {
+          question: "Are you looking for regular training or just in town for a short while?",
+          description: "",
+          options: [
+            {
+              key: "regular",
+              title: "Regular access",
+              body: "open gym access including programming",
+              mini: "from £50.10 - £65.76 /4 weekly recurring"
+            },
+            {
+              key: "visiting",
+              title: "Drop-ins",
+              body: "I'm only here for a short while and looking for somewhere to train.",
+              mini: "Drop-ins: day pass, week pass, 4 week pass"
+            }
+          ]
+        },
+        not_sure: {
+          question: "No problem - what feels closest right now?",
+          description: "",
+          options: [
+            { key: "anything_else", title: "Anything else", body: "I have some questions to ask first" }
+          ]
+        }
+      };
+
+      const state = (() => {
+        const saved = loadState();
+        return {
+          step: saved?.step || 1,
+          service: saved?.service || "",
+          followUp: saved?.followUp || ""
+        };
+      })();
+
+      function persist() {
+        saveState({
+          step: state.step,
+          service: state.service,
+          followUp: state.followUp
+        });
+      }
+
+      function serviceLabel(serviceKey) {
+        const match = SERVICE_OPTIONS.find(x => x.key === serviceKey);
+        return match ? match.title : "";
+      }
+
+      function serviceCanonicalLabel(serviceKey) {
+        const map = {
+          open_gym_access: "Open Gym"
+        };
+        return map[serviceKey] || serviceLabel(serviceKey);
+      }
+
+      function followUpLabel(serviceKey, followUpKey) {
+        const group = FOLLOW_UP[serviceKey];
+        const match = group?.options?.find(x => x.key === followUpKey);
+        return match ? match.title : "";
+      }
+
+      function setStep(nextStep) {
+        state.step = nextStep;
+        persist();
+        render();
+      }
+
+      function render() {
+        ui.options.innerHTML = "";
+        ui.footerLeft.innerHTML = "";
+        ui.footerRight.innerHTML = "";
+
+        if (state.step === 1) {
+          ui.stepLabel.textContent = "QUESTION 1 OF 2";
+          ui.progressFill.style.width = "50%";
+
+          ui.question.textContent = "Tell us what you’re enquiring about";
+          ui.description.textContent = "";
+          ui.formShell.hidden = true;
+
+          SERVICE_OPTIONS.forEach(opt => {
+            ui.options.appendChild(
+              optionCard({
+                title: opt.title,
+                body: opt.body,
+                list: opt.list,
+                pressed: state.service === opt.key,
+                onClick: () => {
+                  state.service = opt.key;
+                  state.followUp = "";
+                  persist();
+                  setStep(2);
+                }
+              })
+            );
+          });
+
+          return;
+        }
+
+        if (state.step === 2) {
+          ui.stepLabel.textContent = "QUESTION 2 OF 2";
+          ui.progressFill.style.width = "100%";
+
+          ui.formShell.hidden = true;
+
+          const follow = FOLLOW_UP[state.service] || FOLLOW_UP.not_sure;
+          ui.question.textContent = follow.question;
+          ui.description.textContent = "";
+
+          follow.options.forEach(opt => {
+            ui.options.appendChild(
+              optionCard({
+                title: opt.title,
+                body: opt.body,
+                mini: opt.mini,
+                pressed: state.followUp === opt.key,
+                onClick: () => {
+                  state.followUp = opt.key;
+                  persist();
+                  setStep(3);
+                }
+              })
+            );
+          });
+
+          ui.footerLeft.appendChild(
+            makeButton({
+              text: "← Back",
+              kind: "secondary",
+              onClick: () => setStep(1)
+            })
+          );
+
+          return;
+        }
+
+        if (state.step === 3) {
+          ui.stepLabel.textContent = "YOUR DETAILS";
+          ui.progressFill.style.width = "100%";
+
+          const metadata = {
+            service: state.service,
+            serviceLabel: serviceCanonicalLabel(state.service),
+            followUp: state.followUp,
+            followUpLabel: followUpLabel(state.service, state.followUp)
+          };
+
+          ui.question.textContent = "Complete the form.";
+          ui.description.textContent = "";
+
+          ui.footerLeft.appendChild(
+            makeButton({
+              text: "Edit answers",
+              kind: "secondary",
+              onClick: () => setStep(1)
+            })
+          );
+
+          const formURL = encodeFormURL(metadata);
+          updatePageURLParams(metadata);
+          ui.formIframe.src = formURL;
+          ui.formShell.hidden = false;
+          loadFormEmbedScriptOnce();
+          // Some embed scripts rewrite iframe src and can strip query params.
+          // Re-assert the full URL after the script has initialized.
+          setTimeout(() => ensureIframeURL(formURL), 50);
+          setTimeout(() => ensureIframeURL(formURL), 300);
+          setTimeout(() => ensureIframeURL(formURL), 1000);
+          requestAnimationFrame(() => {
+            try {
+              ui.formShell.scrollIntoView({ behavior: "smooth", block: "start" });
+            } catch (e) {}
+          });
+          return;
+        }
+      }
+
+      setVideo(BUILD_VIDEO_URL);
+      render();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BombersPT Membership Modal Playground</title>
+<link href="css/styles.css" rel="stylesheet"/>
+<style>
+  body {
+    margin: 0;
+    background:#f5f7fb;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .playground-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+</style>
+</head>
+<body>
+<div class="playground-wrapper">
+  <div id="membership-modal" class="fullscreen-modal" style="display:block; position:relative; max-width:1200px; width:100%; box-shadow:0 8px 32px rgba(0,0,0,0.12); border-radius:20px; overflow:hidden;">
+    <div class="fullscreen-modal__return" role="button" tabindex="0">
+      <div class="fullscreen-modal__return-inner">
+        <span class="fullscreen-modal__return-icon" aria-hidden="true">⏎</span>
+        <span>Membership playground</span>
+      </div>
+    </div>
+    <div id="membership-content" class="fullscreen-modal__content">
+      <div id="membership-viewer">
+        <div class="pricing-container">
+          <div style="background:#fff;border:2px solid #007bff;border-radius:12px;padding:24px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(0,123,255,0.1);">
+            <h1 style="margin:0;font-size:1.8em;font-weight:600;color:#1f3c88;">Explore Membership Options</h1>
+          </div>
+
+          <div id="landing-page">
+            <div class="plan-finder__side-by-side" style="max-width:800px;margin:0 auto;">
+              <div class="plan-finder__card" onclick="window.startPlanFinder && window.startPlanFinder()">
+                <div style="font-size:2em;margin-bottom:12px;">🎯</div>
+                <div class="plan-finder__card-text">Find the Right Plan for Me</div>
+                <div style="font-size:0.9em;color:#6b7894;margin-top:8px;">Answer a few questions to find the best plan for you</div>
+              </div>
+              <div class="plan-finder__card" onclick="window.showPricingTable && window.showPricingTable()">
+                <div style="font-size:2em;margin-bottom:12px;">📋</div>
+                <div class="plan-finder__card-text">View Our Full Pricing Table</div>
+                <div style="font-size:0.9em;color:#6b7894;margin-top:8px;">Browse all membership options</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="plan-finder" id="plan-finder" style="display:none;">
+            <div class="plan-finder__body" id="finder-body">
+              <div class="plan-finder__progress" id="finder-progress"></div>
+              <div id="finder-content"></div>
+            </div>
+            <div style="text-align:center;margin-top:24px;padding-top:24px;border-top:2px solid #e8ecf5;">
+              <button class="plan-finder__btn plan-finder__btn--secondary" type="button" onclick="window.showPricingTable && window.showPricingTable()">📋 Switch to Full Pricing Table</button>
+            </div>
+          </div>
+
+          <div class="main-content" id="main-content" style="display:none;">
+            <div class="section-menu" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;border-bottom:none;padding-bottom:0;margin-bottom:24px;">
+              <button type="button" class="menu-tab active" data-target="open-gym">Open gym</button>
+              <button type="button" class="menu-tab" data-target="classes">Coached sessions</button>
+              <button type="button" class="menu-tab" data-target="pt">Personal Training</button>
+            </div>
+
+            <div class="section">
+              <div class="section-content active" id="open-gym">
+                <div class="option-columns option-columns--stacked">
+                  <div class="option-column">
+                    <h3>Drop-In Options</h3>
+                    <table class="pricing-table pricing-table--cards">
+                      <thead><tr><th>Plan</th><th>Price</th></tr></thead>
+                      <tbody>
+                        <tr class="clickable-row" data-details="24/7 access for one day. No recurring billing." data-plan="Day Pass" data-price="" data-type="Gym Access" data-access="24/7 gym floor" data-expiry="Valid for 1 day" data-perks="No contract commitment."><td>Day Pass</td><td></td></tr>
+                        <tr class="clickable-row" data-details="Full 24/7 access for 7 days. Ideal short-term option." data-plan="1 Week Pass" data-price="" data-type="Gym Access" data-access="24/7 gym floor" data-expiry="Valid for 7 days" data-perks="Flexible short stay."><td>1 Week Pass</td><td></td></tr>
+                        <tr class="clickable-row" data-details="Unlimited 24/7 access for 4 weeks. Non-recurring." data-plan="4 Week Pass" data-price="" data-type="Gym Access" data-access="24/7 gym floor" data-expiry="Valid for 4 weeks" data-perks="No commitment, perfect for trial blocks."><td>4 Week Pass</td><td></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-content" id="classes">
+                <div class="option-columns option-columns--stacked">
+                  <div class="option-column">
+                    <h3>Drop-In Options</h3>
+                    <table class="pricing-table pricing-table--cards">
+                      <thead><tr><th>Plan</th><th>Price</th></tr></thead>
+                      <tbody>
+                        <tr class="clickable-row" data-details="One-off coached group session. Valid for 7 days." data-plan="Single Class" data-plan-label="Single Coached Session" data-price="" data-type="Coached Session" data-access="Any scheduled coached group session" data-expiry="Valid for 7 days" data-perks="Great for trying a session."><td>Single Coached Session</td><td></td></tr>
+                        <tr class="clickable-row" data-details="Pack of 4 coached sessions. Valid for 4 weeks." data-plan="4 Pack" data-plan-label="4 Pack (Coached Sessions)" data-price="" data-type="Coached Session Pack" data-access="Any scheduled coached group session" data-expiry="Use within 4 weeks" data-perks="£11.25 per coached session."><td>4 Pack (Coached Sessions)</td><td></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="option-column highlight">
+                    <div class="coached-plan-grid">
+                      <div class="coached-plan-card" data-coached-primary data-price-path="classes,recurring,twelvePer4Weeks" data-sessions="12">
+                        <div class="coached-plan-card__eyebrow">Recurring options · 🔄 billed every 4 weeks</div>
+                        <div class="coached-plan-card__title">Coached 3/week</div>
+                        <div class="coached-plan-card__total" data-primary-total></div>
+                        <div class="coached-plan-card__per" data-primary-per></div>
+                        <div class="coached-plan-card__addon" data-primary-addon>Base membership selected</div>
+                      </div>
+                      <button type="button" class="coached-addon-card" data-coached-addon data-addon-key="unlimitedTopUp">
+                        <div class="coached-addon-card__title">Upgrade to unlimited classes</div>
+                        <div class="coached-addon-card__price" data-upgrade-price="unlimitedTopUp"></div>
+                        <div class="coached-addon-card__note">Priority booking + unlimited coached sessions</div>
+                      </button>
+                      <button type="button" class="coached-addon-card" data-coached-addon data-addon-key="openGymAddon">
+                        <div class="coached-addon-card__title">Add 24/7 open gym access</div>
+                        <div class="coached-addon-card__price" data-upgrade-price="openGymAddon"></div>
+                        <div class="coached-addon-card__note">Train independently between coached sessions</div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-content" id="pt">
+                <div class="pt-info-box">
+                  <div class="pt-flow">
+                    <div class="pt-flow-box">
+                      <strong>Single</strong>
+                      <div class="price"></div>
+                      <div class="note">Pay-as-you-go</div>
+                    </div>
+                    <div class="pt-flow-arrow"></div>
+                    <div class="pt-flow-box">
+                      <strong>Buy a Block</strong>
+                      <div class="price"></div>
+                      <div class="note">per session</div>
+                      <ul>
+                        <li>✅ Best for flexibility / ad hoc PT</li>
+                      </ul>
+                    </div>
+                    <div class="pt-flow-arrow"></div>
+                    <div class="pt-flow-box">
+                      <strong>Make it Recurring</strong>
+                      <div class="note">for further discount!</div>
+                      <ul>
+                        <li>✅ Lowest pricing</li>
+                        <li>✅ Best for consistency</li>
+                        <li>✅ Bookings done for you</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="pt-table-wrapper">
+                  <div class="pt-table-card">
+                    <h4>PT Blocks</h4>
+                    <table class="pt-plan-table">
+                      <thead><tr><th>Sessions</th><th>Cost / Session</th><th>Total</th><th>Expiry</th></tr></thead>
+                      <tbody>
+                        <tr>
+                          <td>4 sessions</td>
+                          <td><span class="pt-discount">≈13% discount</span></td>
+                          <td></td>
+                          <td>4 weeks</td>
+                        </tr>
+                        <tr>
+                          <td>12 sessions</td>
+                          <td><span class="pt-discount">≈17% discount</span></td>
+                          <td></td>
+                          <td>12 weeks</td>
+                        </tr>
+                        <tr>
+                          <td>24 sessions</td>
+                          <td><span class="pt-discount">≈21% discount</span></td>
+                          <td></td>
+                          <td>24 weeks</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="pt-table-card">
+                    <h4>Recurring PT Plans</h4>
+                    <table class="pt-plan-table">
+                      <thead><tr><th>Frequency</th><th>Cost / Session</th><th>Total (4 weeks)</th><th>Gym Access</th></tr></thead>
+                      <tbody>
+                        <tr>
+                          <td>1 / week <span aria-hidden="true">🔁</span></td>
+                          <td><span class="pt-discount">≈21% discount</span></td>
+                          <td></td>
+                          <td>50% off gym</td>
+                        </tr>
+                        <tr>
+                          <td>2 / week <span aria-hidden="true">🔁</span></td>
+                          <td><span class="pt-discount">≈25% discount</span></td>
+                          <td></td>
+                          <td>FREE 24/7 ✅</td>
+                        </tr>
+                        <tr>
+                          <td>3 / week <span aria-hidden="true">🔁</span></td>
+                          <td><span class="pt-discount">≈29% discount</span></td>
+                          <td></td>
+                          <td>FREE 24/7 ✅</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <button class="plan-finder__btn plan-finder__btn--secondary" style="margin-top:16px;" type="button" onclick="window.openGymDropinsModal && window.openGymDropinsModal()">Add Gym Drop-ins</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-content comparison-section" id="comparison-section" style="display:none;">
+              <h3>Plan Comparison</h3>
+              <div class="comparison-scroll">
+                <table id="comparison-table" class="comparison-table">
+                  <thead>
+                    <tr id="comparison-header"><th>Feature</th></tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div style="text-align:center;margin-top:32px;">
+              <button class="plan-finder__btn plan-finder__btn--secondary" type="button" onclick="window.returnToLanding && window.returnToLanding()">← Back to landing</button>
+              <button class="plan-finder__btn plan-finder__btn--secondary" type="button" onclick="window.startPlanFinder && window.startPlanFinder()">🎯 Switch to Plan Finder</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="discounts-overlay" style="display:none;"></div>
+<div class="discounts-modal" id="discounts-modal" style="display:none;">
+  <div class="discounts-modal__content">
+    <button type="button" class="discounts-close" aria-label="Close discounts">&times;</button>
+    <div class="discounts-content">
+      <h3>Family &amp; Couples Discount</h3>
+      <ul>
+        <li><strong>10% discount</strong> on each membership</li>
+        <li>Available on all standard memberships</li>
+      </ul>
+      <hr>
+      <h3>Classic Family Package</h3>
+      <div class="discounts-table-wrapper">
+        <table class="discounts-table">
+          <thead>
+            <tr><th>Member</th><th>Discount</th><th>Price</th><th>Total</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>(full price)</td><td>£86.11</td><td>£86.11</td></tr>
+            <tr><td>2</td><td><strong>20%</strong></td><td>£68.89</td><td>£155.00</td></tr>
+            <tr><td>3</td><td><strong>30%</strong></td><td>£60.28</td><td>£215.28</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:1em;color:#6b7894;">Speak to the team to activate household pricing.</p>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="gym-dropins-overlay" style="display:none;"></div>
+<div class="discounts-modal" id="gym-dropins-modal" style="display:none;">
+  <div class="discounts-modal__content">
+    <button type="button" class="discounts-close" aria-label="Close gym drop-ins" onclick="window.closeGymDropinsModal && window.closeGymDropinsModal()">&times;</button>
+    <div class="discounts-content">
+      <h3>Open Gym Drop-in Options</h3>
+      <p style="color:#6b7894;margin-bottom:16px;">Add gym access between your PT sessions:</p>
+      <div class="discounts-table-wrapper">
+        <table class="discounts-table">
+          <thead>
+            <tr><th>Option</th><th>Price</th><th>Details</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Day Pass</strong></td><td>£12.50</td><td>24/7 access for one day. Valid for 1 day.</td></tr>
+            <tr><td><strong>1 Week Pass</strong></td><td>£30.00</td><td>Full 24/7 access for 7 days. Valid for 7 days.</td></tr>
+            <tr><td><strong>4 Week Pass</strong></td><td>£74.00</td><td>Unlimited 24/7 access for 4 weeks. Valid for 4 weeks.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="info-modal" id="dropin-prereq-modal" style="display:none;">
+  <div class="info-modal-content dropin-prereq-modal">
+    <button class="close-button" type="button" aria-label="Close" onclick="window.closeDropinPrereqModal && window.closeDropinPrereqModal()">×</button>
+    <div id="dropin-prereq-content"></div>
+  </div>
+</div>
+
+<script>
+(function(global) {
+  global.PRICE_LOOKUP = {
+    classes: {
+      dropins: {
+        single: '£14.50',
+        pack4: '£49.50',
+        pack12: '£120.00'
+      },
+      recurring: {
+        twelvePer4Weeks: '£87.50 / 4 weeks',
+        unlimited: '£97.50 / 4 weeks',
+        classic: '£86.11 / 4 weeks',
+        premium: '£107.92 / 4 weeks'
+      },
+      upgrades: {
+        unlimitedTopUp: '+£10',
+        openGymAddon: '+£10'
+      }
+    },
+    openGym: {
+      dropins: {
+        dayPass: '£12.85',
+        weekPass: '£30.00',
+        fourWeekPass: '£80.00'
+      },
+      recurring: {
+        offPeak: '£50.10 / 4 weeks',
+        openGym: '£65.76 / 4 weeks'
+      }
+    },
+    pt: {
+      single: '£60',
+      blocks: {
+        four: { perSession: '£52.50', total: '£210.00' },
+        twelve: { perSession: '£50.00', total: '£600.00' },
+        twentyFour: { perSession: '£47.50', total: '£1,140.00' }
+      },
+      recurring: {
+        onePerWeek: { perSession: '£47.25', total: '£189.00' },
+        twoPerWeek: { perSession: '£45.00', total: '£360.00' },
+        threePerWeek: { perSession: '£42.75', total: '£513.00' }
+      }
+    }
+  };
+})(window);
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/modals/membership.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof window.showPricingTable === 'function') {
+      window.showPricingTable();
+    }
+  });
+</script>
+</body>
+</html>

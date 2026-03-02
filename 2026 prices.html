@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BombersPT – Membership Options</title>
+  <style>
+    :root{
+      --bg:#f6f8fc;--card:#fff;--ink:#13233f;--muted:#6b7894;--line:#e8ecf5;--brand:#007bff;
+      --shadow:0 6px 18px rgba(19,35,63,.08);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    .build-badge{position:fixed;top:12px;left:12px;background:rgba(19,35,63,.85);color:#fff;padding:6px 10px;border-radius:999px;font-size:12px;z-index:50}
+
+    /* Modal shell */
+    .fullscreen-modal{position:fixed;inset:0;background:rgba(10,20,40,.55);display:flex;align-items:stretch;justify-content:center;z-index:40}
+    .fullscreen-modal__content{width:min(1100px,96vw);height:100%;background:var(--bg);overflow:auto;position:relative}
+    .fullscreen-modal__return{position:sticky;top:0;z-index:60;background:rgba(246,248,252,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+    .fullscreen-modal__return-inner{display:flex;gap:10px;align-items:center;padding:14px 16px;cursor:pointer;color:var(--ink);font-weight:600}
+    .fullscreen-modal__return-icon{display:inline-flex;width:28px;height:28px;border-radius:8px;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line)}
+
+    /* Layout */
+    .pricing-container{padding:22px 16px 48px}
+    .section{margin-top:18px}
+    .section h3,.section h4{margin:0 0 10px}
+    .option-columns{display:grid;grid-template-columns:1fr;gap:16px}
+    @media (min-width: 900px){
+      .option-columns{grid-template-columns:1fr 1fr}
+      .option-columns--stacked{grid-template-columns:1fr 1fr}
+    }
+    .option-column{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+    .option-column.highlight{border:2px solid rgba(0,123,255,.35)}
+
+    /* Tabs */
+    .section-menu{background:transparent}
+    .menu-tab{border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 10px;font-weight:700;cursor:pointer}
+    .menu-tab.active{border-color:rgba(0,123,255,.6);box-shadow:0 0 0 3px rgba(0,123,255,.12)}
+
+    /* Tables */
+    table{width:100%;border-collapse:separate;border-spacing:0}
+    th,td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+    thead th{font-size:12px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
+    tbody tr:last-child td{border-bottom:0}
+    .pricing-table--cards td:last-child{white-space:nowrap;font-weight:800}
+    .clickable-row{cursor:pointer}
+    .clickable-row:hover{background:rgba(0,123,255,.06)}
+    .pricing-card-note{margin-top:6px;font-size:12px;color:var(--muted);font-weight:600}
+
+    /* Plan finder landing cards */
+    .plan-finder__side-by-side{display:grid;grid-template-columns:1fr;gap:16px}
+    @media (min-width: 760px){.plan-finder__side-by-side{grid-template-columns:1fr 1fr}}
+    .plan-finder__card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;box-shadow:var(--shadow);cursor:pointer}
+    .plan-finder__card:hover{box-shadow:0 10px 26px rgba(19,35,63,.14)}
+    .plan-finder__card-text{font-weight:800;font-size:1.05em}
+
+    /* Buttons */
+    .plan-finder__btn{border:0;border-radius:12px;padding:12px 14px;font-weight:800;cursor:pointer}
+    .plan-finder__btn--secondary{background:#fff;border:1px solid var(--line)}
+    .plan-finder__btn--secondary:hover{border-color:rgba(0,123,255,.5)}
+
+    /* Coached plan cards */
+    .coached-plan-grid{display:grid;gap:12px}
+    .coached-plan-card{background:linear-gradient(180deg,#ffffff, #f7fbff);border:1px solid rgba(0,123,255,.25);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+    .coached-plan-card__eyebrow{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:8px}
+    .coached-plan-card__title{font-size:18px;font-weight:900;margin-bottom:6px}
+    .coached-plan-card__total{font-size:22px;font-weight:1000}
+    .coached-plan-card__per{font-size:12px;color:var(--muted);font-weight:700;margin-top:4px}
+    .coached-plan-card__addon{margin-top:10px;font-size:12px;color:var(--muted);font-weight:700}
+    .coached-addon-card{width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow);cursor:pointer}
+    .coached-addon-card:hover{border-color:rgba(0,123,255,.5)}
+    .coached-addon-card__title{font-weight:900}
+    .coached-addon-card__price{margin-top:6px;font-weight:900;color:var(--ink)}
+    .coached-addon-card__note{margin-top:4px;color:var(--muted);font-size:12px;font-weight:700}
+
+    /* PT */
+    .pt-info-box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+    .pt-flow{display:grid;gap:12px;grid-template-columns:1fr}
+    @media (min-width: 900px){.pt-flow{grid-template-columns:1fr 70px 1fr 70px 1fr;align-items:stretch}}
+    .pt-flow-box{background:linear-gradient(180deg,#fff,#fbfcff);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .pt-flow-box .price{font-size:22px;font-weight:1000;margin-top:6px}
+    .pt-flow-box .note{color:var(--muted);font-weight:700;font-size:12px;margin-top:6px}
+    .pt-flow-arrow{display:none}
+    @media (min-width: 900px){
+      .pt-flow-arrow{display:block;background:transparent;position:relative}
+      .pt-flow-arrow:before{content:"";position:absolute;top:50%;left:10px;right:10px;height:2px;background:rgba(0,123,255,.25)}
+      .pt-flow-arrow:after{content:"";position:absolute;top:50%;right:6px;transform:translateY(-50%);border-left:8px solid rgba(0,123,255,.45);border-top:6px solid transparent;border-bottom:6px solid transparent}
+    }
+    .pt-table-wrapper{margin-top:14px;display:grid;grid-template-columns:1fr;gap:16px}
+    @media (min-width: 900px){.pt-table-wrapper{grid-template-columns:1fr 1fr}}
+    .pt-table-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+    .pt-discount{display:inline-block;margin-right:8px;color:var(--muted);font-weight:800;font-size:12px}
+
+    /* Small modal */
+    .modal-overlay{position:fixed;inset:0;background:rgba(10,20,40,.55);z-index:80}
+    .discounts-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:90;padding:18px}
+    .discounts-modal__content{width:min(900px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;border:1px solid var(--line);box-shadow:0 18px 48px rgba(19,35,63,.25);position:relative}
+    .discounts-content{padding:18px}
+    .discounts-close{position:absolute;top:10px;right:12px;border:0;background:#fff;border-radius:10px;width:40px;height:40px;font-size:26px;cursor:pointer;border:1px solid var(--line)}
+    .discounts-table{width:100%}
+    .discounts-table-wrapper{overflow:auto}
+    hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+
+    /* Hide helper */
+    .hidden{display:none !important}
+  </style>
+</head>
+<body>
+  <div class="build-badge">Membership standalone</div>
+
+  <!-- Standalone membership modal (replica of index.html section) -->
+  <div id="membership-modal" class="fullscreen-modal" style="display:none;">
+    <div class="fullscreen-modal__return" role="button" tabindex="0">
+      <div class="fullscreen-modal__return-inner">
+        <span class="fullscreen-modal__return-icon" aria-hidden="true">⏎</span>
+        <span>Go back to onboarding hub</span>
+      </div>
+    </div>
+    <div id="membership-content" class="fullscreen-modal__content">
+      <div id="membership-viewer">
+        <div class="pricing-container">
+          <div style="background:#fff;border:2px solid #007bff;border-radius:12px;padding:24px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(0,123,255,0.1);">
+            <h1 style="margin:0;font-size:1.8em;font-weight:600;color:#1f3c88;">Explore Membership Options</h1>
+          </div>
+
+          <div id="landing-page">
+            <div class="plan-finder__side-by-side" style="max-width:800px;margin:0 auto;">
+              <div class="plan-finder__card" onclick="window.startPlanFinder && window.startPlanFinder()">
+                <div style="font-size:2em;margin-bottom:12px;">🎯</div>
+                <div class="plan-finder__card-text">Find the Right Plan for Me</div>
+                <div style="font-size:0.9em;color:#6b7894;margin-top:8px;">Answer a few questions to find the best plan for you</div>
+              </div>
+              <div class="plan-finder__card" onclick="window.showPricingTable && window.showPricingTable()">
+                <div style="font-size:2em;margin-bottom:12px;">📋</div>
+                <div class="plan-finder__card-text">View Our Full Pricing Table</div>
+                <div style="font-size:0.9em;color:#6b7894;margin-top:8px;">Browse all membership options</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="plan-finder" id="plan-finder" style="display:none;">
+            <div class="plan-finder__body" id="finder-body">
+              <div class="plan-finder__progress" id="finder-progress"></div>
+              <div id="finder-content"></div>
+            </div>
+            <div style="text-align:center;margin-top:24px;padding-top:24px;border-top:2px solid #e8ecf5;">
+              <button class="plan-finder__btn plan-finder__btn--secondary" type="button" onclick="window.showPricingTable && window.showPricingTable()">📋 Switch to Full Pricing Table</button>
+            </div>
+          </div>
+
+          <div class="main-content" id="main-content" style="display:none;">
+            <div class="section-menu" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;border-bottom:none;padding-bottom:0;margin-bottom:24px;">
+              <button type="button" class="menu-tab active" data-target="open-gym">Open gym</button>
+              <button type="button" class="menu-tab" data-target="classes">Coached sessions</button>
+              <button type="button" class="menu-tab" data-target="pt">Personal Training</button>
+            </div>
+
+            <div class="section">
+              <div class="section-content active" id="open-gym">
+                <div class="option-columns option-columns--stacked">
+                  <div class="option-column">
+                    <h3>Drop-In Options</h3>
+                    <table class="pricing-table pricing-table--cards">
+                      <thead><tr><th>Plan</th><th>Price</th></tr></thead>
+                      <tbody>
+                        <tr class="clickable-row" data-details="24/7 access for one day. No recurring billing." data-plan="Day Pass" data-price="" data-type="Gym Access" data-access="24/7 gym floor" data-expiry="Valid for 1 day" data-perks="No contract commitment."><td>Day Pass</td><td></td></tr>
+                        <tr class="clickable-row" data-details="Full 24/7 access for 7 days. Ideal short-term option." data-plan="1 Week Pass" data-price="" data-type="Gym Access" data-access="24/7 gym floor" data-expiry="Valid for 7 days" data-perks="Flexible short stay."><td>1 Week Pass</td><td></td></tr>
+                        <tr class="clickable-row" data-details="Unlimited 24/7 access for 4 weeks. Non-recurring." data-plan="4 Week Pass" data-price="" data-type="Gym Access" data-access="24/7 gym floor" data-expiry="Valid for 4 weeks" data-perks="No commitment, perfect for trial blocks."><td>4 Week Pass</td><td></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-content" id="classes">
+                <div class="option-columns option-columns--stacked">
+                  <div class="option-column">
+                    <h3>Drop-In Options</h3>
+                    <table class="pricing-table pricing-table--cards">
+                      <thead><tr><th>Plan</th><th>Price</th></tr></thead>
+                      <tbody>
+                        <tr class="clickable-row" data-details="One-off coached group session. Valid for 7 days." data-plan="Single Class" data-plan-label="Single Coached Session" data-price="" data-type="Coached Session" data-access="Any scheduled coached group session" data-expiry="Valid for 7 days" data-perks="Great for trying a session."><td>Single Coached Session</td><td></td></tr>
+                        <tr class="clickable-row" data-details="Pack of 4 coached sessions. Valid for 4 weeks." data-plan="4 Pack" data-plan-label="4 Pack (Coached Sessions)" data-price="" data-type="Coached Session Pack" data-access="Any scheduled coached group session" data-expiry="Use within 4 weeks" data-perks="£11.25 per coached session."><td>4 Pack (Coached Sessions)</td><td></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="option-column highlight">
+                    <div class="coached-plan-grid">
+                      <div class="coached-plan-card" data-coached-primary data-price-path="classes,recurring,classic" data-sessions="12">
+                        <div class="coached-plan-card__eyebrow">Recurring options · 🔄 billed every 4 weeks</div>
+                        <div class="coached-plan-card__title">Coached 3/week</div>
+                        <div class="coached-plan-card__total" data-primary-total></div>
+                        <div class="coached-plan-card__per" data-primary-per></div>
+                        <div class="coached-plan-card__addon" data-primary-addon>Base membership selected</div>
+                      </div>
+                      <button type="button" class="coached-addon-card" data-coached-addon data-addon-key="unlimitedTopUp">
+                        <div class="coached-addon-card__title">Upgrade to unlimited classes</div>
+                        <div class="coached-addon-card__price" data-upgrade-price="unlimitedTopUp"></div>
+                        <div class="coached-addon-card__note">Priority booking + unlimited coached sessions</div>
+                      </button>
+                      <button type="button" class="coached-addon-card" data-coached-addon data-addon-key="openGymAddon">
+                        <div class="coached-addon-card__title">Add 24/7 open gym access</div>
+                        <div class="coached-addon-card__price" data-upgrade-price="openGymAddon"></div>
+                        <div class="coached-addon-card__note">Train independently between coached sessions</div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-content" id="pt">
+                <div class="pt-info-box">
+                  <div class="pt-flow">
+                    <div class="pt-flow-box">
+                      <strong>Single</strong>
+                      <div class="price"></div>
+                      <div class="note">Pay-as-you-go</div>
+                    </div>
+                    <div class="pt-flow-arrow"></div>
+                    <div class="pt-flow-box">
+                      <strong>Buy a Block</strong>
+                      <div class="price"></div>
+                      <div class="note">per session</div>
+                      <ul>
+                        <li>✅ Best for flexibility / ad hoc PT</li>
+                      </ul>
+                    </div>
+                    <div class="pt-flow-arrow"></div>
+                    <div class="pt-flow-box">
+                      <strong>Make it Recurring</strong>
+                      <div class="note">for further discount!</div>
+                      <ul>
+                        <li>✅ Lowest pricing</li>
+                        <li>✅ Best for consistency</li>
+                        <li>✅ Bookings done for you</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="pt-table-wrapper">
+                  <div class="pt-table-card">
+                    <h4>PT Blocks</h4>
+                    <table class="pt-plan-table">
+                      <thead><tr><th>Sessions</th><th>Cost / Session</th><th>Total</th><th>Expiry</th></tr></thead>
+                      <tbody>
+                        <tr>
+                          <td>4 sessions</td>
+                          <td><span class="pt-discount">≈13% discount</span></td>
+                          <td></td>
+                          <td>4 weeks</td>
+                        </tr>
+                        <tr>
+                          <td>12 sessions</td>
+                          <td><span class="pt-discount">≈17% discount</span></td>
+                          <td></td>
+                          <td>12 weeks</td>
+                        </tr>
+                        <tr>
+                          <td>24 sessions</td>
+                          <td><span class="pt-discount">≈21% discount</span></td>
+                          <td></td>
+                          <td>24 weeks</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="pt-table-card">
+                    <h4>Recurring PT Plans</h4>
+                    <table class="pt-plan-table">
+                      <thead><tr><th>Frequency</th><th>Cost / Session</th><th>Total (4 weeks)</th><th>Gym Access</th></tr></thead>
+                      <tbody>
+                        <tr>
+                          <td>1 / week <span aria-hidden="true">🔁</span></td>
+                          <td><span class="pt-discount">≈21% discount</span></td>
+                          <td></td>
+                          <td>50% off gym</td>
+                        </tr>
+                        <tr>
+                          <td>2 / week <span aria-hidden="true">🔁</span></td>
+                          <td><span class="pt-discount">≈25% discount</span></td>
+                          <td></td>
+                          <td>FREE 24/7 ✅</td>
+                        </tr>
+                        <tr>
+                          <td>3 / week <span aria-hidden="true">🔁</span></td>
+                          <td><span class="pt-discount">≈29% discount</span></td>
+                          <td></td>
+                          <td>FREE 24/7 ✅</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <button class="plan-finder__btn plan-finder__btn--secondary" style="margin-top:16px;" type="button" onclick="window.openGymDropinsModal && window.openGymDropinsModal()">Add Gym Drop-ins</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-content comparison-section" id="comparison-section" style="display:none;">
+              <h3>Plan Comparison</h3>
+              <div class="comparison-scroll">
+                <table id="comparison-table" class="comparison-table">
+                  <thead>
+                    <tr id="comparison-header"><th>Feature</th></tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div style="text-align:center;margin-top:32px;">
+              <button class="plan-finder__btn plan-finder__btn--secondary" type="button" onclick="window.returnToLanding && window.returnToLanding()">← Back to landing</button>
+              <button class="plan-finder__btn plan-finder__btn--secondary" type="button" onclick="window.startPlanFinder && window.startPlanFinder()">🎯 Switch to Plan Finder</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Discounts / drop-ins modals (copied from index.html) -->
+  <div class="modal-overlay" id="discounts-overlay" style="display:none;"></div>
+  <div class="discounts-modal" id="discounts-modal" style="display:none;">
+    <div class="discounts-modal__content">
+      <button type="button" class="discounts-close" aria-label="Close discounts">&times;</button>
+      <div class="discounts-content">
+        <h3>Household Discounts</h3>
+        <ul>
+          <li><strong>Second member</strong> receives <strong>20% off</strong> their total bill</li>
+          <li><strong>Third member</strong> receives <strong>30% off</strong> their total bill</li>
+          <li>Available on all standard memberships</li>
+        </ul>
+        <hr>
+        <h3>Example: Classic Family Package</h3>
+        <div class="discounts-table-wrapper">
+          <table class="discounts-table">
+            <thead>
+              <tr><th>Member</th><th>Discount</th><th>Price</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>(full price)</td><td>£86.11</td><td>£86.11</td></tr>
+              <tr><td>2</td><td><strong>20%</strong></td><td>£68.89</td><td>£155.00</td></tr>
+              <tr><td>3</td><td><strong>30%</strong></td><td>£60.28</td><td>£215.28</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:1em;color:#6b7894;">Speak to the team to activate household pricing.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="gym-dropins-overlay" style="display:none;"></div>
+  <div class="discounts-modal" id="gym-dropins-modal" style="display:none;">
+    <div class="discounts-modal__content">
+      <button type="button" class="discounts-close" aria-label="Close gym drop-ins" onclick="window.closeGymDropinsModal && window.closeGymDropinsModal()">&times;</button>
+      <div class="discounts-content">
+        <h3>Open Gym Drop-in Options</h3>
+        <p style="color:#6b7894;margin-bottom:16px;">Add gym access between your PT sessions:</p>
+        <div class="discounts-table-wrapper">
+          <table class="discounts-table">
+            <thead>
+              <tr><th>Option</th><th>Price</th><th>Details</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Day Pass</strong></td><td>£12.85</td><td>24/7 access for one day. Valid for 1 day.</td></tr>
+              <tr><td><strong>1 Week Pass</strong></td><td>£30.00</td><td>Full 24/7 access for 7 days. Valid for 7 days.</td></tr>
+              <tr><td><strong>4 Week Pass</strong></td><td>£80.00</td><td>Unlimited 24/7 access for 4 weeks. Valid for 4 weeks.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Inlined PRICE_LOOKUP (from Price lookup.txt)
+    (function (global) {
+      global.PRICE_LOOKUP = {
+        classes: {
+          dropins: {
+            single: '£14.50',
+            pack4: '£49.50',
+            pack12: '£120.00'
+          },
+          recurring: {
+            twelvePer4Weeks: '£87.50 / 4 weeks',
+            unlimited: '£97.50 / 4 weeks',
+            // Current class memberships (used in tables)
+            classic: '£86.11 / 4 weeks',
+            premium: '£107.92 / 4 weeks'
+          },
+          upgrades: {
+            unlimitedTopUp: '+£10',
+            openGymAddon: '+£10'
+          }
+        },
+        openGym: {
+          dropins: {
+            dayPass: '£12.85',
+            weekPass: '£30.00',
+            fourWeekPass: '£80.00'
+          },
+          recurring: {
+            offPeak: '£50.10 / 4 weeks',
+            openGym: '£65.76 / 4 weeks'
+          }
+        },
+        pt: {
+          single: '£60',
+          blocks: {
+            four: { perSession: '£52.50', total: '£210.00' },
+            twelve: { perSession: '£50.00', total: '£600.00' },
+            twentyFour: { perSession: '£47.50', total: '£1,140.00' }
+          },
+          recurring: {
+            onePerWeek: { perSession: '£47.25', total: '£189.00' },
+            twoPerWeek: { perSession: '£45.00', total: '£360.00' },
+            threePerWeek: { perSession: '£42.75', total: '£513.00' }
+          }
+        }
+      };
+    })(window);
+
+    // Standalone UI helpers (replacing external utils.js + membership.js)
+    (function () {
+      var membershipModal = null;
+      var discountsOverlay = null;
+      var discountsModal = null;
+      var gymDropinsOverlay = null;
+      var gymDropinsModal = null;
+
+      function qs(sel, root) { return (root || document).querySelector(sel); }
+      function qsa(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+      window.showMembershipModal = function () {
+        membershipModal = membershipModal || qs('#membership-modal');
+        if (membershipModal) membershipModal.style.display = 'flex';
+        // Default to landing on open
+        window.returnToLanding();
+      };
+
+      window.hideMembershipModal = function () {
+        membershipModal = membershipModal || qs('#membership-modal');
+        if (membershipModal) membershipModal.style.display = 'none';
+      };
+
+      window.returnToLanding = function () {
+        var landing = qs('#landing-page');
+        var finder = qs('#plan-finder');
+        var main = qs('#main-content');
+        if (landing) landing.style.display = 'block';
+        if (finder) finder.style.display = 'none';
+        if (main) main.style.display = 'none';
+      };
+
+      window.showPricingTable = function () {
+        var landing = qs('#landing-page');
+        var finder = qs('#plan-finder');
+        var main = qs('#main-content');
+        if (landing) landing.style.display = 'none';
+        if (finder) finder.style.display = 'none';
+        if (main) main.style.display = 'block';
+        // default to first tab
+        activateTab('open-gym');
+      };
+
+      // Simple placeholder plan-finder (keeps UX, but no questionnaire)
+      window.startPlanFinder = function () {
+        var landing = qs('#landing-page');
+        var finder = qs('#plan-finder');
+        var main = qs('#main-content');
+        if (landing) landing.style.display = 'none';
+        if (main) main.style.display = 'none';
+        if (finder) finder.style.display = 'block';
+
+        var content = qs('#finder-content');
+        if (content) {
+          content.innerHTML = '';
+          var card = document.createElement('div');
+          card.className = 'option-column';
+          card.innerHTML =
+            '<h3>Plan Finder</h3>' +
+            '<p style="color:var(--muted);font-weight:700;margin-top:6px;">This standalone page includes the full pricing table. If you want the interactive questionnaire, paste your existing Plan Finder JS into this file (or re-link it).</p>' +
+            '<div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">' +
+              '<button class="plan-finder__btn plan-finder__btn--secondary" type="button" onclick="window.showPricingTable()">📋 Open Full Pricing Table</button>' +
+              '<button class="plan-finder__btn plan-finder__btn--secondary" type="button" onclick="window.returnToLanding()">← Back</button>' +
+            '</div>';
+          content.appendChild(card);
+        }
+      };
+
+      function activateTab(targetId) {
+        qsa('.menu-tab').forEach(function (btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-target') === targetId);
+        });
+        qsa('.section-content').forEach(function (sec) {
+          sec.classList.toggle('active', sec.id === targetId);
+          sec.style.display = sec.id === targetId ? 'block' : 'none';
+        });
+      }
+
+      function openOverlay(overlayEl, modalEl) {
+        if (overlayEl) overlayEl.style.display = 'block';
+        if (modalEl) modalEl.style.display = 'flex';
+      }
+
+      function closeOverlay(overlayEl, modalEl) {
+        if (overlayEl) overlayEl.style.display = 'none';
+        if (modalEl) modalEl.style.display = 'none';
+      }
+
+      window.openGymDropinsModal = function () {
+        gymDropinsOverlay = gymDropinsOverlay || qs('#gym-dropins-overlay');
+        gymDropinsModal = gymDropinsModal || qs('#gym-dropins-modal');
+        openOverlay(gymDropinsOverlay, gymDropinsModal);
+      };
+
+      window.closeGymDropinsModal = function () {
+        gymDropinsOverlay = gymDropinsOverlay || qs('#gym-dropins-overlay');
+        gymDropinsModal = gymDropinsModal || qs('#gym-dropins-modal');
+        closeOverlay(gymDropinsOverlay, gymDropinsModal);
+      };
+
+      window.openDiscountsModal = function () {
+        discountsOverlay = discountsOverlay || qs('#discounts-overlay');
+        discountsModal = discountsModal || qs('#discounts-modal');
+        openOverlay(discountsOverlay, discountsModal);
+      };
+
+      window.closeDiscountsModal = function () {
+        discountsOverlay = discountsOverlay || qs('#discounts-overlay');
+        discountsModal = discountsModal || qs('#discounts-modal');
+        closeOverlay(discountsOverlay, discountsModal);
+      };
+
+      function wireModalClose() {
+        discountsOverlay = discountsOverlay || qs('#discounts-overlay');
+        discountsModal = discountsModal || qs('#discounts-modal');
+        gymDropinsOverlay = gymDropinsOverlay || qs('#gym-dropins-overlay');
+        gymDropinsModal = gymDropinsModal || qs('#gym-dropins-modal');
+
+        // close buttons (discounts close already exists)
+        var discountsClose = qs('#discounts-modal .discounts-close');
+        if (discountsClose) discountsClose.addEventListener('click', window.closeDiscountsModal);
+
+        // click overlay closes
+        if (discountsOverlay) discountsOverlay.addEventListener('click', window.closeDiscountsModal);
+        if (gymDropinsOverlay) gymDropinsOverlay.addEventListener('click', window.closeGymDropinsModal);
+
+        // ESC closes
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            window.closeDiscountsModal();
+            window.closeGymDropinsModal();
+          }
+        });
+      }
+
+      function wireTabs() {
+        qsa('.menu-tab').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            activateTab(btn.getAttribute('data-target'));
+          });
+        });
+
+        // Ensure only first section visible by default
+        qsa('.section-content').forEach(function (sec, idx) {
+          sec.style.display = idx === 0 ? 'block' : 'none';
+        });
+      }
+
+      // Pricing detail modal (simple, inline)
+      function ensureDetailModal() {
+        if (qs('#price-detail-overlay')) return;
+        var overlay = document.createElement('div');
+        overlay.id = 'price-detail-overlay';
+        overlay.className = 'modal-overlay';
+        overlay.style.display = 'none';
+
+        var modal = document.createElement('div');
+        modal.id = 'price-detail-modal';
+        modal.className = 'discounts-modal';
+        modal.style.display = 'none';
+        modal.innerHTML =
+          '<div class="discounts-modal__content">' +
+            '<button type="button" class="discounts-close" aria-label="Close details">&times;</button>' +
+            '<div class="discounts-content">' +
+              '<h3 id="price-detail-title" style="margin-top:0;"></h3>' +
+              '<p id="price-detail-price" style="font-weight:1000;font-size:22px;margin:6px 0 10px;"></p>' +
+              '<p id="price-detail-details" style="color:var(--muted);font-weight:700;margin:0 0 14px;"></p>' +
+              '<div style="display:grid;gap:8px;grid-template-columns:1fr;">' +
+                '<div id="price-detail-meta" style="border-top:1px solid var(--line);padding-top:12px;"></div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+
+        document.body.appendChild(overlay);
+        document.body.appendChild(modal);
+
+        function close() {
+          overlay.style.display = 'none';
+          modal.style.display = 'none';
+        }
+        overlay.addEventListener('click', close);
+        qs('.discounts-close', modal).addEventListener('click', close);
+        window.openPriceDetail = function (data) {
+          qs('#price-detail-title').textContent = data.title || 'Plan details';
+          qs('#price-detail-price').textContent = data.price || '';
+          qs('#price-detail-details').textContent = data.details || '';
+
+          var meta = qs('#price-detail-meta');
+          var rows = [];
+          function add(label, value){ if(value){ rows.push('<div><strong>'+label+':</strong> <span style="color:var(--muted);font-weight:700">'+value+'</span></div>'); } }
+          add('Type', data.type);
+          add('Access', data.access);
+          add('Expiry', data.expiry);
+          add('Perks', data.perks);
+          meta.innerHTML = rows.join('');
+
+          overlay.style.display = 'block';
+          modal.style.display = 'flex';
+        };
+      }
+
+      function wireClickableRows() {
+        ensureDetailModal();
+        qsa('tr.clickable-row').forEach(function (row) {
+          row.addEventListener('click', function () {
+            window.openPriceDetail({
+              title: row.getAttribute('data-plan-label') || row.getAttribute('data-plan') || 'Plan',
+              price: row.getAttribute('data-price') || (row.cells[1] ? row.cells[1].textContent.trim() : ''),
+              details: row.getAttribute('data-details') || '',
+              type: row.getAttribute('data-type') || '',
+              access: row.getAttribute('data-access') || '',
+              expiry: row.getAttribute('data-expiry') || '',
+              perks: row.getAttribute('data-perks') || ''
+            });
+          });
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // Wire "go back" to simply close modal (or go to landing if you prefer)
+        var back = qs('.fullscreen-modal__return');
+        if (back) {
+          back.addEventListener('click', function () {
+            // standalone behavior: go back to landing card view
+            window.returnToLanding();
+          });
+          back.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') window.returnToLanding();
+          });
+        }
+
+        wireTabs();
+        wireModalClose();
+        wireClickableRows();
+
+        // Add a small trigger for Household Discounts into the pricing view
+        var headerBox = qs('.pricing-container h1');
+        if (headerBox) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'plan-finder__btn plan-finder__btn--secondary';
+          btn.style.marginTop = '12px';
+          btn.textContent = '🏠 View household discounts';
+          btn.addEventListener('click', window.openDiscountsModal);
+          headerBox.parentElement.appendChild(btn);
+        }
+
+        // Show immediately (original behaviour)
+        window.showMembershipModal();
+      });
+
+      // Expose tab helper for other code
+      window.activatePricingTab = activateTab;
+    })();
+  </script>
+  <script>
+    (function () {
+      function get(path) {
+        var obj = window.PRICE_LOOKUP || null;
+        if (!obj) return null;
+        for (var i = 0; i < path.length; i++) {
+          if (!obj || typeof obj !== 'object') return null;
+          obj = obj[path[i]];
+        }
+        return obj || null;
+      }
+
+      function updateRowPrice(planName, path) {
+        var price = get(path);
+        if (!price) return;
+        var row = document.querySelector('tr.clickable-row[data-plan="' + planName + '"]');
+        if (!row) return;
+        var cells = row.querySelectorAll('td');
+        if (cells.length >= 2) {
+          cells[1].textContent = price;
+        }
+        row.dataset.price = price;
+      }
+
+      function updatePTBlockRow(index, key) {
+        var tbody = document.querySelector('#pt .pt-plan-table tbody');
+        if (!tbody) return;
+        var row = tbody.rows[index];
+        if (!row) return;
+        var perSession = get(['pt', 'blocks', key, 'perSession']);
+        var total = get(['pt', 'blocks', key, 'total']);
+        if (perSession && row.cells[1]) {
+          var discountSpan = row.cells[1].querySelector('.pt-discount');
+          var discountHTML = discountSpan ? discountSpan.outerHTML : '';
+          row.cells[1].innerHTML = perSession + (discountHTML ? ' ' + discountHTML : '');
+        }
+        if (total && row.cells[2]) {
+          row.cells[2].textContent = total;
+        }
+      }
+
+      function updatePTRecurringRow(index, key) {
+        var tbody = document.querySelectorAll('#pt .pt-plan-table tbody')[1];
+        if (!tbody) return;
+        var row = tbody.rows[index];
+        if (!row) return;
+        var perSession = get(['pt', 'recurring', key, 'perSession']);
+        var total = get(['pt', 'recurring', key, 'total']);
+        if (perSession && row.cells[1]) {
+          var discountSpan = row.cells[1].querySelector('.pt-discount');
+          var discountHTML = discountSpan ? discountSpan.outerHTML : '';
+          row.cells[1].innerHTML = perSession + (discountHTML ? ' ' + discountHTML : '');
+        }
+        if (total && row.cells[2]) {
+          row.cells[2].textContent = total;
+        }
+      }
+
+      function setPerClassNote(planName, sessions) {
+        var row = document.querySelector('tr.clickable-row[data-plan="' + planName + '"]');
+        if (!row) return;
+        var cells = row.querySelectorAll('td');
+        if (cells.length < 2) return;
+        var priceCell = cells[1];
+        var text = priceCell.firstChild && priceCell.firstChild.textContent ? priceCell.firstChild.textContent.trim() : '';
+        if (!text) return;
+        var match = text.replace(/,/g, '').match(/([\d.]+)/);
+        if (!match) return;
+        var amount = parseFloat(match[1]);
+        if (!amount || !sessions) return;
+        var per = amount / sessions;
+        var perText = '£' + per.toFixed(2) + ' per session';
+        var existing = priceCell.querySelector('.pricing-card-note');
+        if (!existing) {
+          existing = document.createElement('div');
+          existing.className = 'pricing-card-note';
+          priceCell.appendChild(existing);
+        }
+        existing.textContent = perText;
+      }
+
+      function updateUpgradePrice(upgradeKey, path) {
+        var price = get(path);
+        if (!price) return;
+        var nodes = document.querySelectorAll('[data-upgrade-price="' + upgradeKey + '"]');
+        if (!nodes.length) return;
+        for (var i = 0; i < nodes.length; i++) {
+          nodes[i].textContent = price;
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        if (window.PRICE_LOOKUP) {
+          // Open Gym drop-ins
+          updateRowPrice('Day Pass', ['openGym', 'dropins', 'dayPass']);
+          updateRowPrice('1 Week Pass', ['openGym', 'dropins', 'weekPass']);
+          updateRowPrice('4 Week Pass', ['openGym', 'dropins', 'fourWeekPass']);
+
+          // Open Gym recurring
+
+          // Class drop-ins
+          updateRowPrice('Single Class', ['classes', 'dropins', 'single']);
+          updateRowPrice('4 Pack', ['classes', 'dropins', 'pack4']);
+
+          // Class recurring
+          updateRowPrice('Classic Membership', ['classes', 'recurring', 'classic']);
+
+          // Per-class notes for packs
+          setPerClassNote('4 Pack', 4);
+          // Per-session note for recurring 3/week (≈12 sessions per 4 weeks)
+          setPerClassNote('Classic Membership', 12);
+          updateUpgradePrice('unlimitedTopUp', ['classes', 'upgrades', 'unlimitedTopUp']);
+          updateUpgradePrice('openGymAddon', ['classes', 'upgrades', 'openGymAddon']);
+
+          // PT hero prices (single + "Buy a Block")
+          var ptSinglePrice = get(['pt', 'single']);
+          var lowestBlockPrice = get(['pt', 'blocks', 'twentyFour', 'perSession']);
+          var ptHeroPrices = document.querySelectorAll('#pt .pt-flow-box .price');
+          if (ptSinglePrice && ptHeroPrices[0]) {
+            ptHeroPrices[0].textContent = ptSinglePrice;
+          }
+          if (lowestBlockPrice && ptHeroPrices[1]) {
+            ptHeroPrices[1].textContent = 'as low as ' + lowestBlockPrice;
+          }
+
+          // PT blocks table
+          updatePTBlockRow(0, 'four');
+          updatePTBlockRow(1, 'twelve');
+          updatePTBlockRow(2, 'twentyFour');
+
+          // PT recurring table
+          updatePTRecurringRow(0, 'onePerWeek');
+          updatePTRecurringRow(1, 'twoPerWeek');
+          updatePTRecurringRow(2, 'threePerWeek');
+        }
+
+      });
+    })();
+  </script>
+</body>
+</html>
