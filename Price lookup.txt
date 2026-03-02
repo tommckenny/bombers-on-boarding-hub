@@ -1,0 +1,48 @@
+// Central price lookup used by 2026 prices page.
+// Edit the values below to update pricing.
+(function (global) {
+  global.PRICE_LOOKUP = {
+    classes: {
+      dropins: {
+        single: '£14.50',
+        pack4: '£49.50',
+        pack12: '£120.00'
+      },
+      recurring: {
+        twelvePer4Weeks: '£87.50 / 4 weeks',
+        unlimited: '£97.50 / 4 weeks',
+        // Current class memberships (used in tables)
+        classic: '£86.11 / 4 weeks',
+        premium: '£107.92 / 4 weeks'
+      },
+      upgrades: {
+        unlimitedTopUp: '+£10',
+        openGymAddon: '+£10'
+      }
+    },
+    openGym: {
+      dropins: {
+        dayPass: '£12.85',
+        weekPass: '£30.00',
+        fourWeekPass: '£80.00'
+      },
+      recurring: {
+        offPeak: '£50.10 / 4 weeks',
+        openGym: '£65.76 / 4 weeks'
+      }
+    },
+    pt: {
+      single: '£60',
+      blocks: {
+        four: { perSession: '£52.50', total: '£210.00' },
+        twelve: { perSession: '£50.00', total: '£600.00' },
+        twentyFour: { perSession: '£47.50', total: '£1,140.00' }
+      },
+      recurring: {
+        onePerWeek: { perSession: '£47.25', total: '£189.00' },
+        twoPerWeek: { perSession: '£45.00', total: '£360.00' },
+        threePerWeek: { perSession: '£42.75', total: '£513.00' }
+      }
+    }
+  };
+})(window);

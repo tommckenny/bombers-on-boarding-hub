@@ -1,510 +1,380 @@
-<!-- 0. Base & Responsive Styles -->
-<style>
-  body {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-    background: #fff;
-    margin: 0;
-    padding: 0;
-  }
-  #onboarding-outer {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem 1rem 3rem 1rem;
-  }
-  #onboarding-checklist h2 {
-    font-size: 1.65rem;
-    font-weight: 700;
-    margin: 1.8rem 0 1.1rem 0;
-    letter-spacing: -0.01em;
-    color: #19213a;
-  }
-  #onboarding-checklist h3 {
-    font-size: 1.15rem;
-    font-weight: 600;
-    margin: 1.2rem 0 0.7rem 0;
-    color: #32406e;
-    letter-spacing: 0.01em;
-  }
-  #onboarding-checklist .details-table {
-    max-width: 640px;
-    margin: 0 auto 2rem auto;
-    padding: 1.25rem 1.5rem 1.25rem 1.5rem;
-    border: 1px solid #dee4ec;
-    border-radius: 12px;
-    background: #f8fafc;
-    box-sizing: border-box;
-    font-size: 1.09rem;
-    box-shadow: 0 2px 8px 0 #1a21351a;
-  }
-  #onboarding-checklist .details-header {
-    font-size: 1.14rem;
-    font-weight: 600;
-    margin-bottom: 0.8em;
-    color: #32406e;
-    letter-spacing: 0.01em;
-  }
-  #onboarding-checklist .details-label {
-    min-width: 105px;
-    display: inline-block;
-    font-weight: 500;
-    padding-right: 1em;
-    vertical-align: top;
-    color: #2e3d5d;
-  }
-  #onboarding-checklist .details-ok {
-    color: #243153;
-    word-break: break-word;
-    max-width: 240px;
-  }
-  #onboarding-checklist .details-missing {
-    color: #c62828;
-    font-weight: 600;
-    word-break: break-word;
-    max-width: 240px;
-  }
-  #onboarding-checklist .details-missing span[title] {
-    margin-left: .2em;
-    font-size: 1em;
-    vertical-align: middle;
-  }
-  #onboarding-checklist .details-table td {
-    padding-bottom: 0.3em;
-  }
-  #onboarding-checklist .details-table th {
-    text-align: left;
-    font-weight: 500;
-    padding-bottom: 0.3em;
-  }
-  #onboarding-checklist ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  #onboarding-checklist li {
-    margin: 1rem 0;
-    font-size: 1.09rem;
-  }
-  #onboarding-checklist .btn {
-    display: inline-block;
-    padding: 0.5em 1.2em;
-    margin-left: 0.5em;
-    background: #2154fc;
-    color: #fff;
-    font-size: 0.93rem;
-    font-weight: 500;
-    border: none;
-    border-radius: 8px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: transform .1s, box-shadow .1s, background .2s;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-  }
-  #onboarding-checklist .btn:hover {
-    background: #173aa7;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(33,84,252,0.13);
-  }
-  /* Checklist box styling */
-  #onboarding-checklist .checklist-block {
-    max-width: 640px;
-    margin: 0 auto 2.2rem auto;
-    padding: 1.5rem 1.2rem 1.2rem 1.2rem;
-    border: 1.2px solid #dee4ec;
-    border-radius: 13px;
-    background: #f7faff;
-    box-shadow: 0 2px 8px #32406e10;
-  }
-  #onboarding-checklist .checklist-block li {
-    margin: 1.1rem 0;
-    font-size: 1.09rem;
-  }
-  /* Responsive tweaks */
-  @media (max-width: 600px) {
-    #onboarding-outer {
-      padding: 0.5rem 0.2rem 2rem 0.2rem;
-    }
-    #onboarding-checklist h2 {
-      font-size: 1.19rem;
-      margin-bottom: 1.25rem;
-    }
-    #onboarding-checklist .details-table {
-      padding: 0.8rem 0.5rem;
-      font-size: 1rem;
-    }
-    #onboarding-checklist .details-label {
-      min-width: 92px;
-      padding-right: 0.6em;
-      font-size: 1rem;
-    }
-    #onboarding-checklist .details-ok,
-    #onboarding-checklist .details-missing {
-      max-width: 99vw;
-      display: block;
-      overflow-wrap: break-word;
-      word-break: break-word;
-    }
-    #onboarding-checklist table {
-      width: 100%;
-      table-layout: fixed;
-    }
-    #onboarding-checklist td, #onboarding-checklist th {
-      font-size: 1rem;
-      vertical-align: top;
-      word-break: break-word;
-      overflow-wrap: break-word;
-    }
-    #onboarding-checklist .btn {
-      width: 100%;
-      margin: 0.5em 0 0 0;
-      font-size: 1rem;
-    }
-  }
-  /* Spinner */
-  #onboarding-spinner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 180px;
-    font-size: 1.15rem;
-    color: #222;
-  }
-  .spinner {
-    border: 4px solid #eee;
-    border-top: 4px solid #2154fc;
-    border-radius: 50%;
-    width: 38px;
-    height: 38px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1.15em;
-  }
-  /* Bombers app download row */
-  #app-download-row {
-    max-width: 640px;
-    margin: 2.5rem auto 1.5rem auto;
-    padding: 1.2rem 1.2rem 1.2rem 1.2rem;
-    border: 1.2px solid #dee4ec;
-    border-radius: 13px;
-    background: #f7faff;
-    box-shadow: 0 2px 8px #32406e10;
-    text-align: center;
-  }
-  #app-download-row .btn {
-    margin: 0.2em 0.5em 0.2em 0.5em;
-    font-size: 1.07rem;
-  }
-</style>
-
-<div id="onboarding-outer">
-  <div id="onboarding-checklist">
-    <div id="onboarding-spinner">
-      <div class="spinner"></div>
-      <div>Fetching your details…</div>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BombersPT Onboarding Checklist 5.0</title>
+<link href="css/styles.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script data-widget-id="66997c50f8a8fb7afd68cdcf" src="https://widgets.leadconnectorhq.com/loader.js"></script>
+</head>
+<body class="app-loading-active">
+    <div class="build-badge">v10.15</div>
+<nav class="quick-links" aria-label="Menu and settings">
+  <button type="button" class="quick-link quick-links__toggle" data-toggle-menu aria-expanded="false">
+    ☰ Menu &amp; Settings
+  </button>
+  <div class="quick-links__dropdown" hidden>
+    <button type="button" class="quick-link" data-action="onboarding">📘 How our onboarding works</button>
+    <button type="button" class="quick-link" data-action="membership">💳 Membership options</button>
+    <button type="button" class="quick-link" data-action="timetable">🗓 Timetable</button>
+    <button type="button" class="quick-link" data-action="blueprint">📝 Bombers Blueprint</button>
+    <button type="button" class="quick-link" data-action="faqs">❓ FAQs</button>
+    <button type="button" class="quick-link" data-action="tcs">📑 T&amp;Cs</button>
   </div>
-  <!-- Bombers App Download Row -->
-  <div id="app-download-row" style="display:none">
-    <div style="font-weight:600;margin-bottom:0.6em;">Download the Bombers App</div>
-    <a class="btn" href="https://apps.apple.com/gb/app/bombers-physical-training/id1589832573" target="_blank">iOS</a>
-    <a class="btn" href="https://play.google.com/store/apps/details?id=com.pushpress.bombersphysicaltraining&gl=GB" target="_blank">Android</a>
+</nav>
+<div id="checklist-alert"></div>
+
+<!-- Terms modal (used by terms.js) -->
+<div id="terms-modal-overlay">
+  <div class="terms-modal">
+    <button aria-label="Close" class="terms-close" type="button">×</button>
+    <div class="terms-modal-title"></div>
+    <div class="terms-modal-progress"></div>
+    <div class="terms-modal-body"></div>
+    <div class="terms-modal-error"></div>
+    <div class="terms-modal-footer"></div>
   </div>
 </div>
 
-<!-- Confetti for ticks -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<!-- Legacy info modal (kept) -->
+<div class="info-modal" id="stage-modal">
+  <div class="info-modal-content">
+    <button aria-label="Close" class="close-button" type="button">×</button>
+    <div id="stage-modal-body"></div>
+  </div>
+</div>
 
-<script>
-(function(){
-  let contactId = new URLSearchParams(window.location.search).get("contactId");
-  const isStaff = new URLSearchParams(window.location.search).has("staff");
+<div class="checklist-heading-container">
+  <div>
+    <h2 class="checklist-heading">Your onboarding journey with BombersPT</h2>
+  </div>
+</div>
 
-  if (!contactId) {
-    const m = window.location.pathname.match(/-contactId=([^\/]+)/);
-    contactId = m ? m[1] : null;
-  }
-  console.debug("Contact ID:", contactId, "Staff mode:", isStaff);
+<div id="app-loading-overlay" class="app-loading-overlay">
+  <div class="app-loading-card">
+    <div class="app-loading-spinner" aria-hidden="true"></div>
+    <p class="app-loading-text">Loading your onboarding hub…</p>
+    <div class="app-loading-quote">
+      <p class="app-loading-quote__title" id="app-loading-quote-title"></p>
+      <div class="app-loading-quote__body" id="app-loading-quote-body"></div>
+    </div>
+  </div>
+</div>
 
-  const container = document.getElementById("onboarding-checklist");
-  const appDownloadRow = document.getElementById("app-download-row");
-  if (!container) {
-    console.error("Checklist container not found!");
-    return;
-  }
+<div class="checklist-nav">
+  <button class="checklist-tab active" data-target="enquiry">Enquiry</button>
+  <button class="checklist-tab" data-target="initial1">Initial 1-1</button>
+  <button class="checklist-tab" data-target="trial">Choose plan</button>
+</div>
 
-  let loading = false;
-  let loadedOnce = false;
-  let bpValue = "";
-  let bpSaving = false;
-  let lastBpSaved = "";
+<div class="container" id="checklist-container">
+  <section class="checklist-section active" id="enquiry-section"></section>
+  <section class="checklist-section" id="initial1-section"></section>
+  <section class="checklist-section" id="trial-section"></section>
+</div>
 
-  const FIELDS = {
-    APPT_DATE:   "BP5YJXFaKjFrmz0N53J4",
-    APPT_TIME:   "QL8Rg5ozgb1pPHKfdoGs",
-    APPT_COACH:  "Iczk4Pcm4XecHzZZj31E",
-    BP_RESULT:   "Cvzpen1uIP6CNffM6BwN",
-    TRIAL_START: "kqpNMwQER3ljj3r6mZxi",
-    PIN:         "rkCkFkCpBjfPQk8YvHG4",
-    PHONE:       "npNqCUwvXd09eIV882kT"
-  };
+<div id="enquiry-flow-overlay" class="enquiry-flow-overlay" hidden aria-hidden="true">
+  <div class="enquiry-flow">
+    <div class="enquiry-flow__card">
+      <div class="enquiry-flow__progress" id="enquiry-flow-progress"></div>
+      <h3 class="enquiry-flow__question" id="enquiry-flow-question"></h3>
+      <p class="enquiry-flow__description" id="enquiry-flow-description"></p>
+      <div class="enquiry-flow__options" id="enquiry-flow-options"></div>
+      <div class="enquiry-flow__error" id="enquiry-flow-error" role="alert"></div>
+      <div class="enquiry-flow__footer">
+        <div class="enquiry-flow__spinner" id="enquiry-flow-spinner">Saving…</div>
+        <button type="button" class="enquiry-flow__back" id="enquiry-flow-back">← Back</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-  const TAGS = {
-    CONSULT_DONE:   "consultation form submitted",
-    PARQ_SUBMITTED: "par-q submitted",
-    NSI_BOOKED:     "nsi booked",
-    DC_BOOKED:      "discovery call booked",
-    INTRO_ATTENDED: "attended intro",
-    INTRO_NOSHOW:   "intro no show",
-    INDUCTION_DONE: "online induction completed",
-    PURCHASED_1TO1: "initial 1-1 purchased",
-    BOOKED_1TO1:    "on-boarding 1-1 booked",
-    DEBRIEF_DONE:   "initial 1-1 debrief completed",
-    MEMBERSHIP_DONE:"membership form submitted"
-  };
+<!-- Structured modals expected by JS modules -->
+<div id="membership-modal" class="fullscreen-modal" style="display:none;">
+    <div class="fullscreen-modal__return" role="button" tabindex="0" data-close-target="membership">
+      <div class="fullscreen-modal__return-inner">
+        <span class="fullscreen-modal__return-icon" aria-hidden="true">⏎</span>
+        <span>Go back to onboarding hub</span>
+      </div>
+    </div>
+    <div id="membership-content" class="fullscreen-modal__content">
+      <div class="membership-placeholder" data-membership-placeholder>
+        <div class="membership-placeholder__spinner app-loading-spinner" aria-hidden="true"></div>
+        <p class="membership-placeholder__text">Loading membership options…</p>
+      </div>
+    </div>
+  </div>
+<div class="info-modal" id="trial-week-modal" style="display:none;">
+  <div class="info-modal-content">
+    <button class="close-button" type="button" aria-label="Close" onclick="window.closeTrialWeekModal && window.closeTrialWeekModal()">×</button>
+    <div id="trial-week-content"></div>
+  </div>
+</div>
 
-  function burst(){
-    const dur=2000,end=Date.now()+dur,defs={startVelocity:30,spread:360,ticks:60,zIndex:9999};
-    const iv = setInterval(()=>{
-      if(Date.now()>end) return clearInterval(iv);
-      confetti(Object.assign({},defs,{particleCount:40,origin:{x:Math.random(),y:Math.random()-0.2}}));
-    },250);
-  }
+<div class="info-modal" id="onboarding-packages-modal" style="display:none;">
+  <div class="info-modal-content" style="max-width:720px;">
+    <button class="close-button" type="button" aria-label="Close" onclick="window.closeOnboardingPackagesModal && window.closeOnboardingPackagesModal()">×</button>
+    <div id="onboarding-packages-content"></div>
+  </div>
+</div>
 
-  async function saveBP(v){
-    bpSaving = true;
-    renderChecklist();
-    try {
-      const res = await fetch(`https://ghl-proxy.fly.dev/contact/${contactId}`, {
-        method:"PUT",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ customField:[{id:FIELDS.BP_RESULT,value:v}] })
-      });
-      if (!res.ok) throw new Error(await res.text());
-      lastBpSaved = v;
-      bpSaving = false;
-      renderChecklist();
-    } catch(e) {
-      console.error("Failed saving BP:", e);
-      alert("Failed to save blood pressure.");
-      bpSaving = false;
-      renderChecklist();
-    }
-  }
+<div id="response-viewer-modal" class="info-modal" style="display:none;">
+  <div class="info-modal-content" style="max-width:720px;">
+    <button class="close-button" type="button" aria-label="Close" onclick="window.closeResponseViewer && window.closeResponseViewer()">×</button>
+    <div id="response-viewer-body"></div>
+  </div>
+</div>
 
-  window.bpInputHandler = function(e) {
-    bpValue = e.target.value;
-  };
+<div id="faqs-modal" class="fullscreen-modal" style="display:none;">
+  <div class="fullscreen-modal__return" role="button" tabindex="0" data-close-target="faqs">
+    <div class="fullscreen-modal__return-inner">
+      <span class="fullscreen-modal__return-icon" aria-hidden="true">⏎</span>
+      <span>Go back to onboarding hub</span>
+    </div>
+  </div>
+  <div id="faqs-content" class="fullscreen-modal__content"></div>
+</div>
 
-  window.bpSubmit = async function() {
-    if (!bpValue) {
-      alert("Please enter your blood pressure.");
-      return;
-    }
-    await saveBP(bpValue);
-  };
+<div id="blueprint-modal" class="fullscreen-modal" style="display:none;">
+  <div class="fullscreen-modal__return" role="button" tabindex="0" data-close-target="blueprint">
+    <div class="fullscreen-modal__return-inner">
+      <span class="fullscreen-modal__return-icon" aria-hidden="true">⏎</span>
+      <span>Go back to onboarding hub</span>
+    </div>
+  </div>
+  <div id="blueprint-content" class="fullscreen-modal__content"></div>
+</div>
 
-  function getPINStatus(pin, startTimeStr) {
-    if (!pin || !startTimeStr) return "PIN will be available closer to your session time.";
-    const now = new Date();
-    const start = new Date(startTimeStr);
-    const unlockTime = new Date(start.getTime() - 15 * 60000);
-    if (now < unlockTime) return "PIN will be available closer to your session time.";
-    return `Your PIN is ${pin}`;
-  }
+<div id="timetable-modal" class="fullscreen-modal" style="display:none;">
+  <div class="fullscreen-modal__return" role="button" tabindex="0" data-close-target="timetable">
+    <div class="fullscreen-modal__return-inner">
+      <span class="fullscreen-modal__return-icon" aria-hidden="true">⏎</span>
+      <span>Go back to onboarding hub</span>
+    </div>
+  </div>
+  <div class="fullscreen-modal__content timetable-modal__content">
+    <div class="timetable-modal__notice" role="note">
+      <div class="timetable-modal__notice-text">
+        If the timetable looks blank, tap “Open in browser”.
+      </div>
+      <a class="btn timetable-modal__open" data-timetable-open target="_blank" rel="noopener noreferrer">
+        Open in browser
+      </a>
+    </div>
+    <iframe
+      title="Bombers timetable"
+      data-timetable-iframe
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      src=""
+    ></iframe>
+  </div>
+</div>
 
-  // ==== RENDER YOUR DETAILS SECTION ====
-  function renderYourDetailsSection(contact, customFields) {
-    contact = contact || {};
-    customFields = Array.isArray(customFields) ? customFields : [];
-    const getF = id => {
-      const f = customFields.find(f => f.id === id);
-      return f ? f.value : "";
-    };
-    const firstName = contact.firstName || "";
-    const lastName = contact.lastName || "";
-    const email = contact.email || "";
-    const phone = getF(FIELDS.PHONE) || "";
-    const dob = contact.dateOfBirth || "";
+<div id="tcs-modal" class="fullscreen-modal" style="display:none;">
+  <div class="fullscreen-modal__return" role="button" tabindex="0" data-close-target="tcs">
+    <div class="fullscreen-modal__return-inner">
+      <span class="fullscreen-modal__return-icon" aria-hidden="true">⏎</span>
+      <span>Go back to onboarding hub</span>
+    </div>
+  </div>
+  <div id="tcs-content" class="fullscreen-modal__content"></div>
+</div>
 
-    function isNameValid(n) { return n && n.length > 1; }
-    function isEmailValid(e) { return !!e && /\S+@\S+\.\S+/.test(e); }
-    function isPhoneValid(p) { return !!p && /^\+?\d{10,}$/.test((p+"").replace(/\s/g,"")); }
-    function isDOBValid(d) { return !!d && /^\d{4}-\d{2}-\d{2}$/.test(d); }
+<div id="onboardingworks-modal" class="fullscreen-modal" style="display:none;">
+  <div class="fullscreen-modal__return">
+    <div class="fullscreen-modal__return-inner fullscreen-modal__return-inner--split">
+      <button class="modal-nav-button modal-nav-button--back" type="button" data-close-target="onboardingworks">
+        <span aria-hidden="true" class="modal-nav-button__icon">⏎</span>
+        Go back to onboarding hub
+      </button>
+      <a class="modal-nav-link modal-nav-link--forward" href="#" data-membership-forward>
+        View membership options
+        <span aria-hidden="true" class="modal-nav-button__icon">⟶</span>
+      </a>
+    </div>
+  </div>
+  <div id="onboardingworks-content" class="fullscreen-modal__content"></div>
+</div>
 
-    function row(label, value, valid) {
-      let valHTML = value ? value : "<span>Missing</span>";
-      if (!valid)
-        valHTML += ' <span title="Missing or invalid">&#9888;</span>';
-      return `<tr>
-        <th class="details-label">${label}:</th>
-        <td class="${valid ? 'details-ok' : 'details-missing'}">${valHTML}</td>
-      </tr>`;
-    }
+<div id="consultation-form-modal" class="fullscreen-modal" style="display:none;">
+  <div class="fullscreen-modal__return" role="button" tabindex="0" data-close-target="consultation">
+    <div class="fullscreen-modal__return-inner">
+      <span class="fullscreen-modal__return-icon" aria-hidden="true">⏎</span>
+      <span>Go back to onboarding hub</span>
+    </div>
+  </div>
+  <div id="consultation-form-content" class="fullscreen-modal__content"></div>
+</div>
 
-    let html = `<div class="details-table">
-      <div class="details-header">Your Details</div>
-      <table style="border-collapse:collapse;width:100%;background:none;">
-        ${row("Name", (firstName + (lastName ? " " + lastName : "")), isNameValid(firstName) && isNameValid(lastName))}
-        ${row("Phone", phone, isPhoneValid(phone))}
-        ${row("Email", email, isEmailValid(email))}
-        ${row("Date of Birth", dob, isDOBValid(dob))}
-      </table>
-    </div>`;
-    return html;
-  }
-  // ==== END RENDER YOUR DETAILS SECTION ====
+<div class="info-modal" id="consultation-reminder-modal" style="display:none;">
+  <div class="info-modal-content" style="max-width:520px;">
+    <button class="close-button" type="button" aria-label="Close" data-consult-reminder-close>×</button>
+    <div class="consultation-reminder-body">
+      <div>
+        <h3 data-consult-reminder-title style="margin:0 0 0.5rem;">Thanks for requesting your intro</h3>
+        <p data-consult-reminder-text style="margin:0;line-height:1.6;"></p>
+      </div>
+      <button type="button" class="btn next-action-glow" data-consult-reminder-action>Complete consultation</button>
+    </div>
+  </div>
+</div>
 
-  // === RENDER BLOOD PRESSURE SUBITEM ===
-  function renderBPItem(bp, editing) {
-    if (bp) {
-      return `✅ Blood Pressure Check<div style='margin-left:1.5em;color:#555'>Results: ${bp}</div>`;
-    }
-    if (editing) {
-      return `
-        ⬜ Blood Pressure Check
-        <div style='margin-left:1.5em;'>
-          <input id="bp-input" type="text" style="padding:0.2em 0.6em;font-size:1rem;width:110px;" placeholder="e.g. 120/80" onchange="bpInputHandler(event)" value="${bpValue||''}">
-          <button class="btn" style="margin-left:0.5em;" onclick="bpSubmit()">Save</button>
-          <button class="btn" style="background:#ddd;color:#222;margin-left:0.5em;" onclick="cancelBPEntry()">Cancel</button>
+<div class="info-modal" id="initial-purchase-modal" style="display:none;">
+  <div class="info-modal-content" style="max-width:560px;">
+    <button class="close-button" type="button" aria-label="Close" onclick="window.closeInitialPurchaseModal && window.closeInitialPurchaseModal()">×</button>
+    <div id="initial-purchase-content"></div>
+  </div>
+</div>
+
+<div class="info-modal" id="trial-cancel-modal" style="display:none;">
+  <div class="info-modal-content" style="max-width:640px;">
+    <button class="close-button" type="button" aria-label="Close" onclick="window.closeTrialCancelModal && window.closeTrialCancelModal()">×</button>
+    <div id="trial-cancel-body"></div>
+  </div>
+</div>
+
+<div class="info-modal" id="induction-reminder-modal" style="display:none;">
+  <div class="info-modal-content" style="max-width:520px;">
+    <button class="close-button" type="button" aria-label="Close" onclick="window.closeInductionReminderModal && window.closeInductionReminderModal()">×</button>
+    <div class="induction-reminder-body" style="display:flex;flex-direction:column;gap:1rem;">
+      <div>
+        <h3 style="margin:0 0 0.5rem;color:#1f3c88;">Please complete your online induction</h3>
+        <p class="induction-reminder-text">Please complete this before your 1-1 to ensure we can jump straight into the session.</p>
+      </div>
+      <button type="button" class="btn" onclick="window.handleInductionReminderConfirm && window.handleInductionReminderConfirm()">Complete online induction</button>
+    </div>
+  </div>
+</div>
+
+<!-- Overlays/modals used by membership.js -->
+<div class="modal-overlay" id="discounts-overlay" style="display:none;"></div>
+<div class="discounts-modal" id="discounts-modal" style="display:none;">
+  <div class="discounts-modal__content">
+    <button type="button" class="discounts-close" aria-label="Close discounts">&times;</button>
+    <div class="discounts-content">
+      <h3>Family &amp; Couples Discount</h3>
+      <ul>
+        <li><strong>10% discount</strong> on each membership</li>
+        <li>Available on all standard memberships</li>
+      </ul>
+      <hr>
+      <h3>Classic Family Package</h3>
+      <div class="discounts-table-wrapper">
+        <table class="discounts-table">
+          <thead>
+            <tr><th>Member</th><th>Discount</th><th>Price</th><th>Total</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>(full price)</td><td>£86.11</td><td>£86.11</td></tr>
+            <tr><td>2</td><td><strong>20%</strong></td><td>£68.89</td><td>£155.00</td></tr>
+            <tr><td>3</td><td><strong>30%</strong></td><td>£60.28</td><td>£215.28</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:1em;color:#6b7894;">Speak to the team to activate household pricing.</p>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="gym-dropins-overlay" style="display:none;"></div>
+<div class="discounts-modal" id="gym-dropins-modal" style="display:none;">
+  <div class="discounts-modal__content">
+    <button type="button" class="discounts-close" aria-label="Close gym drop-ins" onclick="window.closeGymDropinsModal && window.closeGymDropinsModal()">&times;</button>
+    <div class="discounts-content">
+      <h3>Open Gym Drop-in Options</h3>
+      <p style="color:#6b7894;margin-bottom:16px;">Add gym access between your PT sessions:</p>
+      <div class="discounts-table-wrapper">
+        <table class="discounts-table">
+          <thead>
+            <tr><th>Option</th><th>Price</th><th>Details</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Day Pass</strong></td><td>£12.50</td><td>24/7 access for one day. Valid for 1 day.</td></tr>
+            <tr><td><strong>1 Week Pass</strong></td><td>£30.00</td><td>Full 24/7 access for 7 days. Valid for 7 days.</td></tr>
+            <tr><td><strong>4 Week Pass</strong></td><td>£74.00</td><td>Unlimited 24/7 access for 4 weeks. Valid for 4 weeks.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="info-modal" id="dropin-prereq-modal" style="display:none;">
+  <div class="info-modal-content dropin-prereq-modal">
+    <button class="close-button" type="button" aria-label="Close" onclick="window.closeDropinPrereqModal && window.closeDropinPrereqModal()">×</button>
+    <div id="dropin-prereq-content"></div>
+  </div>
+</div>
+
+<!-- Iframe modals used by utils.js helpers -->
+<div class="iframe-modal" id="google-form-modal" style="display:none;">
+  <div class="iframe-modal__content">
+    <button class="iframe-close" type="button">×</button>
+    <iframe allowfullscreen id="google-form-frame" title="Embedded Form"></iframe>
+  </div>
+</div>
+<div class="iframe-modal" id="survey-modal" style="display:none;">
+  <div class="iframe-modal__content">
+    <button class="iframe-close" type="button">×</button>
+    <iframe allowfullscreen id="survey-frame" title="Embedded Survey"></iframe>
+  </div>
+</div>
+
+<!-- Initial Debrief Modal -->
+<div id="initial-debrief-modal" class="consultation-modal-overlay" style="display:none;">
+  <div class="consultation-modal" role="dialog" aria-modal="true" aria-labelledby="initial-debrief-title">
+    <button class="consultation-close" type="button" aria-label="Close" onclick="window.closeInitialDebriefModal && window.closeInitialDebriefModal()">&times;</button>
+    <div class="consultation-header">
+      <div class="consultation-progress" id="initial-debrief-progress">Question 1 of 3</div>
+    </div>
+    <div id="initial-debrief-body" class="consultation-body"></div>
+  </div>
+</div>
+
+<!-- Consultation Wizard Modal (parity with build) -->
+<div id="consultation-modal-overlay" class="consultation-modal-overlay" style="display:none;">
+  <div class="consultation-modal" role="dialog" aria-modal="true" aria-labelledby="consultation-title">
+    <button class="consultation-close" type="button" aria-label="Close">&times;</button>
+    <div class="consultation-header">
+      <button class="consultation-back" type="button" style="display:none;">&#8592; <span aria-hidden="true">Back</span></button>
+      <div class="consultation-progress">Step 1</div>
+    </div>
+    <div id="consultation-body" class="consultation-body"></div>
+    <div class="consultation-actions">
+      <button class="btn btn--primary consultation-cta" type="button">Next</button>
+      <div class="consultation-spinner">Saving...</div>
+      <div class="consultation-error" role="alert"></div>
+    </div>
+    <div class="consultation-close-confirm">
+      <div class="consultation-close-card">
+        <h4>Discard progress?</h4>
+        <p>If you close now, your answers on this screen will be lost.</p>
+        <div class="consultation-close-actions">
+          <button type="button" class="btn btn--muted" data-confirm="stay">Continue editing</button>
+          <button type="button" class="btn btn--danger" data-confirm="discard">Discard</button>
         </div>
-      `;
-    }
-    return `⬜ Blood Pressure Check <button class="btn" style="margin-left:1em;" onclick="startBPEntry()">Enter Results</button>`;
-  }
+      </div>
+    </div>
+  </div>
+  </div>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/dialogs.js"></script>
+<script src="js/api.js"></script>
+<script src="js/blood-pressure.js"></script>
+<script src="js/modals/terms.js"></script>
+<script src="js/modals/membership-lite.js"></script>
+<script src="js/modals/trial-week.js"></script>
+<script src="js/modals/info-modals.js"></script>
+<script src="js/consultation/fields.js"></script>
+<script src="js/consultation/wizard.js"></script>
+<script src="js/consultation.js"></script>
+<script src="js/enquiry-flow.js"></script>
+<script src="js/manual-override.js"></script>
+<script src="js/checklist.js"></script>
+<script src="js/dev-mode.js"></script>
 
-  // === MAKE BP ENTRY EDITABLE ===
-  window.startBPEntry = function() {
-    bpEditMode = true;
-    renderChecklist();
-  };
-  window.cancelBPEntry = function() {
-    bpEditMode = false;
-    renderChecklist();
-  };
-
-  async function renderChecklist(){
-    if (loading) return;
-    if(!contactId){
-      container.innerHTML = "<p style='color:red;'>No contactId in URL.</p>";
-      return;
-    }
-    if (!loadedOnce) {
-      container.innerHTML = `
-        <div id="onboarding-spinner">
-          <div class="spinner"></div>
-          <div>Fetching your details…</div>
-        </div>
-      `;
-    }
-    loading = true;
-    let data;
-    try{
-      const r = await fetch(`https://ghl-proxy.fly.dev/contact/${contactId}`);
-      data = await r.json();
-      loadedOnce = true;
-    }catch(e){
-      container.innerHTML = "<p style='color:red;'>Error loading data from server.<br>"+(e.message||e)+"</p>";
-      loading = false;
-      return;
-    }
-    loading = false;
-
-    const contact = (data && data.contact) ? data.contact : {};
-    const tags = contact.tags || [];
-    const fieldsArr = Array.isArray(contact.customField) ? contact.customField : [];
-    const fields = Object.fromEntries(fieldsArr.map(f=>[f.id,f.value||""]));
-    const hasTag = t=>tags.includes(t), getF=id=>fields[id]||"";
-
-    // Show Bombers App links always
-    if (appDownloadRow) appDownloadRow.style.display = 'block';
-
-    // Headings: details, enquiry, trial
-    let html = "";
-    try {
-      html += renderYourDetailsSection(contact, fieldsArr);
-    } catch (e) {
-      html += `<div style="max-width:640px;margin:1em auto 2em;font-family:Inter,sans-serif;padding:1em 1.5em;background:#ffeaea;border:1px solid #c62828;color:#b71c1c;border-radius:7px">
-        <b>Error rendering your details</b><br>
-        ${e.message||e}
-      </div>`;
-    }
-
-    const consultationDone = hasTag(TAGS.CONSULT_DONE);
-
-    const enquiry = [
-      { label:"Consultation Questionnaire", done:hasTag(TAGS.CONSULT_DONE),
-        button:!hasTag(TAGS.CONSULT_DONE)?{text:"Complete Now",href:`https://start.bomberspt.co.uk/about-you?contactId=${contactId}`} :null },
-      { label:"Health Questionnaire", done:hasTag(TAGS.PARQ_SUBMITTED),
-        button:!hasTag(TAGS.PARQ_SUBMITTED)?{text:"Complete Now",href:`https://start.bomberspt.co.uk/health-questionnaire?contactId=${contactId}`} :null },
-      { label:"Intro Meeting",
-        done:hasTag(TAGS.NSI_BOOKED)||hasTag(TAGS.DC_BOOKED),
-        status: hasTag(TAGS.INTRO_ATTENDED)?"Attended" : hasTag(TAGS.INTRO_NOSHOW)?"No show" : (hasTag(TAGS.NSI_BOOKED)||hasTag(TAGS.DC_BOOKED))?"Scheduled":null,
-        details:(hasTag(TAGS.NSI_BOOKED)||hasTag(TAGS.DC_BOOKED))?`${getF(FIELDS.APPT_TIME)} on ${getF(FIELDS.APPT_DATE)} with ${getF(FIELDS.APPT_COACH)}`:"",
-        button:!hasTag(TAGS.NSI_BOOKED)&&!hasTag(TAGS.DC_BOOKED)?{text:"Book Now",href:`https://start.bomberspt.co.uk/no-sweat-intro?contactId=${contactId}`} :{text:"View Details",href:`https://start.bomberspt.co.uk/your-intro?contactId=${contactId}`},
-        sub:[
-          {
-            label: "Blood Pressure Check",
-            done: !!getF(FIELDS.BP_RESULT),
-            render: () => renderBPItem(getF(FIELDS.BP_RESULT), bpEditMode)
-          }
-        ]
-      },
-      { label:"Online Induction", done:hasTag(TAGS.INDUCTION_DONE),
-        button:!hasTag(TAGS.INDUCTION_DONE)?{text:"Complete Now",href:"https://docs.google.com/forms/d/e/1FAIpQLSezbaFv0m6VnAydhbVc1_KRWpslYeFZa05OrYIxdfJHSeU32A/viewform"}:null }
-    ];
-
-    const trial = [
-      { label:"Initial 1-1", done:hasTag(TAGS.DEBRIEF_DONE),
-        status: hasTag(TAGS.DEBRIEF_DONE)?null : hasTag(TAGS.BOOKED_1TO1)?"Booked" : hasTag(TAGS.PURCHASED_1TO1)?"Purchased":null,
-        button: hasTag(TAGS.DEBRIEF_DONE)?null : hasTag(TAGS.BOOKED_1TO1)?{text:"View Details",href:`https://start.bomberspt.co.uk/your-initial-1-1?contactId=${contactId}`} : hasTag(TAGS.PURCHASED_1TO1)?{text:"Book Now",href:`https://start.bomberspt.co.uk/book-initial-1-1?contactId=${contactId}`} : {text:"Purchase Now",href:`https://start.bomberspt.co.uk/purchase-initial-1-1?contactId=${contactId}`},
-        sub:[
-          { label:"PIN", done:!!getF(FIELDS.PIN),
-            details:getPINStatus(getF(FIELDS.PIN), `${getF(FIELDS.APPT_DATE)} ${getF(FIELDS.APPT_TIME)}`) },
-          { label:"1-1 Debrief", done:hasTag(TAGS.DEBRIEF_DONE),
-            button:(!hasTag(TAGS.DEBRIEF_DONE)&&new Date()>=new Date(`${getF(FIELDS.APPT_DATE)}T${getF(FIELDS.APPT_TIME)}`))?{text:"Complete Debrief",href:`https://start.bomberspt.co.uk/onboarding-session-debrief?contactId=${contactId}`} : null }
-        ] },
-      { label:"Membership Setup", done:hasTag(TAGS.MEMBERSHIP_DONE),
-        button: hasTag(TAGS.MEMBERSHIP_DONE)?{text:"Update Plan",href:`https://start.bomberspt.co.uk/membership-setup?contactId=${contactId}&editPlan=true`} : consultationDone?{text:"Choose Plan",href:`https://start.bomberspt.co.uk/membership-setup?contactId=${contactId}`} : null },
-      { label:"Trial Period", done: hasTag(TAGS.DEBRIEF_DONE) && !!getF(FIELDS.TRIAL_START), details: getF(FIELDS.TRIAL_START)?`Started on ${getF(FIELDS.TRIAL_START)}`:"", button: hasTag(TAGS.DEBRIEF_DONE)?{text:"View Trial Info",href:`https://start.bomberspt.co.uk/trial-info?contactId=${contactId}`} : null }
-    ];
-
-    // Animation logic for ticks
-    const all = [...enquiry, ...enquiry.flatMap(i=>(i.sub||[]).map(s=>(s.render ? {label:s.label, done:s.done, custom:true} : s))), ...(hasTag(TAGS.NSI_BOOKED)||hasTag(TAGS.DC_BOOKED)?trial:[])];
-    if (window._prev){ all.forEach(item=>{ const prev = window._prev.find(p=>p.label===item.label); if (!prev || prev.done!==item.done || prev.status!==(item.status||"") || prev.details!==(item.details||"")) burst(); }); }
-    window._prev = all.map(i=>({ label:i.label, done:i.done, status:i.status||"", details:i.details||"" }));
-    const json = JSON.stringify(window._prev); if (json === window._last) return; window._last = json;
-
-    // === MAIN CHECKLIST HTML START ===
-    html += `<h2>Your enquiry</h2>
-    <div class="checklist-block"><ul>`;
-    enquiry.forEach(i=>{
-      html += `<li style="display:flex;justify-content:space-between;align-items:center;margin:1rem 0"><div>${i.done?"✅":"⬜"} <strong>${i.label}</strong>${i.status?` — <em>${i.status}</em>`:""}</div><div>${
-        i.button ? `<a class="btn" href="${i.button.href}" target="_blank">${i.button.text}</a>` : ""
-      }</div></li>`;
-      if(i.sub){ i.sub.forEach(s=>{
-        if (typeof s.render === "function") {
-          html += `<li style="margin-left:2em;margin-bottom:.75em;width:100%">${s.render()}</li>`;
-        } else {
-          html += `<li style="margin-left:2em;margin-bottom:.75em">${s.done?"✅":"⬜"} ${s.label}${s.details?`<div style='margin-left:1.5em;color:#555'>${s.details}</div>`:""}${s.button?`<a class="btn" href="${s.button.href}" target="_blank">${s.button.text}</a>`:""}</li>`;
-        }
-      }); }
-    });
-    html += `</ul></div>`;
-
-    if (hasTag(TAGS.NSI_BOOKED)||hasTag(TAGS.DC_BOOKED)) {
-      html += `<h2>Your trial</h2>
-      <div class="checklist-block"><ul>`;
-      trial.forEach(i=>{
-        html += `<li style="display:flex;justify-content:space-between;align-items:center;margin:1rem 0"><div>${i.done?"✅":"⬜"} <strong>${i.label}</strong>${i.status?` — <em>${i.status}</em>`:""}${i.details?`<div style="margin-left:1.5em;color:#555">${i.details}</div>`:""}</div><div>${i.button?`<a class="btn" href="${i.button.href}" target="_blank">${i.button.text}</a>`:""}</div></li>`;
-        if(i.sub){ i.sub.forEach(s=>{ html += `<li style="margin-left:2em;margin-bottom:.75em">${s.done?"✅":"⬜"} ${s.label}${s.details?`<div style='margin-left:1.5em;color:#555'>${s.details}</div>`:""}${s.button?`<a class="btn" href="${s.button.href}" target="_blank">${s.button.text}</a>`:""}</li>`; }); }
-      });
-      html += `</ul></div>`;
-    }
-    // === MAIN CHECKLIST HTML END ===
-
-    container.innerHTML = html;
-  }
-
-  renderChecklist();
-  setInterval(renderChecklist, 3000);
-})();
-</script>
+</body>
+</html>
